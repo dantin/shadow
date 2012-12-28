@@ -2,7 +2,7 @@
  * Copyright (c) david
  * All rights reserved.
  *
- * filename    : nQueens.c
+ * filename    : queens.c
  * version     : 1.0
  * author      : david
  * date        : 2012-12-27
