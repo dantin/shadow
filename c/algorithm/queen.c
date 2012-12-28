@@ -2,13 +2,12 @@
  * Copyright (c) david
  * All rights reserved.
  *
- * filename    : nQueens
+ * filename    : nQueens.c
  * version     : 1.0
  * author      : david
- * date        : 2012-12-25
+ * date        : 2012-12-27
  * description : 在n*n (n=1 or n>=4 )的棋盘上放置n个皇后，如果在同一行，同一列，同一对角线上都不存在两个皇后，那么这个棋盘格局就是n皇后的一个解。
  *
- * URL: http://blog.csdn.net/developinglife/article/details/6683845
  */
 #include <stdio.h>
 #include <math.h>
@@ -19,7 +18,9 @@
 // a[i]为第i行皇后所在列
 int a[N];
 
-// 图形化输出
+/*
+ * 图形化输出
+ */
 void show(void)
 {
   int i;
@@ -47,7 +48,9 @@ void show(void)
   }
 }
 
-// 满足条件返回1，否则返回0
+/*
+ * 满足条件返回1，否则返回0
+ */
 int check(int n)
 {
   int i;
@@ -62,7 +65,9 @@ int check(int n)
   return 1;
 }
 
-// 在第n行放置第n个皇后
+/*
+ * 在第n行放置第n个皇后
+ */
 void put(int n)
 {
   int i;

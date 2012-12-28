@@ -1,12 +1,34 @@
+/*
+ * Copyright (c) david
+ * All rights reserved.
+ *
+ * filename    : suduku.c
+ * version     : 1.0
+ * author      : david
+ * date        : 2012-12-26
+ * description : 计算数独的C语言代码
+ *
+ */
 #include <stdio.h>
 #include <math.h>
 
 #define SIZE 9
 
+// Array that contains values of all 81 cells in the grid.
 static int cells[SIZE * SIZE];
 
+// A set of bit-vectors that represent the known values for each column.
+// Specifically, if column c contains the digits d1 and d2,
+//   colsSet[c] = 2^(d1-1)|2^(d2-1)
+// For example, if column 0 contains the values 1 and 4, colsSet[0] = 9.
+// The information in this variable is redundant with the information
+// in the cells variable.
+// The purpose of this variable is to reduce the cost of determining 
+// whether a particular digit can be set in a particular cell.
 static int cols[SIZE];
+// This purpose and behavior of this variable is similar to cols.
 static int rows[SIZE];
+// This purpose and behavior of this variable is similar to cols.
 static int subgrids[SIZE];
 
 typedef enum {FALSE, TRUE} bool;
@@ -28,6 +50,9 @@ int main(void)
   return 0;
 }
 
+/*
+ * Recursive routine that implements the bifurcation algorithm
+ */
 void suduku(void)
 {
   static int found = 0;
@@ -52,6 +77,9 @@ void suduku(void)
   }
 }
 
+/*
+ * Finds an empty cell
+ */
 int find(void)
 {
   int i;
@@ -65,6 +93,19 @@ int find(void)
   return -1;
 }
 
+/*
+ * This method returns a grid of givens and empty cells ready to be solved.
+ * The cells containing givens have values between 1 and 9.
+ * Empty cells have the value 0.
+ * 
+ * Characters are read one at a time from the input stream and placed into
+ * the grid in left-to-right and top-down order.
+ *  - The characters 0 or . indicates an empty cell.
+ *  - The characters 1 to 9 indicates a given.
+ *  - The character # is used for comments; subsequent characters are ignored
+ *    until a newline is encountered. 
+ *  - All other characters are simply ignored.
+ */
 void read(void)
 {
   int loc, ch;
@@ -89,7 +130,11 @@ void read(void)
 }
 
 /*
- * set a number into the cell
+ * Sets a number in a cell. This method checks to see if
+ *  1. the cell is empty
+ *  2. the cell is allowed to contain the specified number.
+ *     E.g. if the number is 5 but the row already has a 5, the cell will not
+ *     be set and false is returned.
  */
 bool set(const int loc, const int num)
 {

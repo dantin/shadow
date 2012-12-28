@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) david
+ * All rights reserved.
+ *
+ * filename    : hanoi.c
+ * version     : 1.0
+ * author      : david
+ * date        : 2012-12-24
+ * description : 汉诺塔
+ *
+ */
 #include <stdio.h>
 
 int main(void)

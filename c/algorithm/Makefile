@@ -2,10 +2,10 @@ CC=gcc
 
 .PHONY: clean test all
 
-all: nQueen hanoi suduku
+all: queen hanoi suduku 24-points
 
-nQueen: nQueen.c
-	$(CC) -o nQueen nQueen.c
+queen: queen.c
+	$(CC) -o queen queen.c
 
 hanoi: hanoi.c
 	$(CC) -o hanoi hanoi.c
@@ -13,10 +13,14 @@ hanoi: hanoi.c
 suduku: suduku.c
 	$(CC) -o suduku suduku.c
 
+24-points: 24-points.c
+	$(CC) -o 24-points 24-points.c
+
 clean:
-	rm -f nQueen hanoi suduku a.out *~
+	rm -f queen hanoi suduku 24-points a.out *~
 
 test:
-	./nQueen
+	./queen
 	./hanoi < data/hanoi
 	./suduku < data/suduku
+	./24-points < data/24-points
