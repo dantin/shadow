@@ -23,7 +23,7 @@ int main(void)
   for(i = 1; i < SIZE; i++) {
     for(j = 1; j < SIZE; j++) {
       if(j % i == 0) {
-	lights[j] = lights[j] ? FALSE : TRUE;
+	lights[j] = !lights[j];
       }
     }
   }
