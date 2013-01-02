@@ -13,39 +13,43 @@
 #include <stdlib.h>
 #include <string.h>
 
+void swap(char *a, char *b);
 int permutation(char per[], int m, int len);
 
 int main(void)
 {
   char per[] = "ABCD";
 
-  int count = permutation(per, 0, strlen(per));
+  int count = permutation(per, 0, strlen(per) - 1);
   printf("The total: %d\n", count);
 
   return 0;
+}
+
+void swap(char *a, char *b)
+{
+  char tmp;
+
+  tmp = *a;
+  *a = *b;
+  *b = tmp;
 }
 
 int permutation(char per[], int m, int len)
 {
   static int count = 0;
   int i;
-  char tmp;
 
-  if(m < len - 1) {
-    permutation(per, m + 1, len);
-    for(i = m + 1; i < len; i++) {
-      tmp = per[m];
-      per[m] = per[i];
-      per[i] = tmp;
-      permutation(per, m + 1, len);
-
-      tmp = per[m];
-      per[m] = per[i];
-      per[i] = tmp;
-    }
-  } else {
-    ++count;
+  if(m > len) {
     printf("%s\n", per);
+    ++count;
+  } else {
+
+    for(i = m; i <= len; i++) {
+      swap(&per[m], &per[i]);
+      permutation(per, m + 1, len);
+      swap(&per[m], &per[i]);
+    }
   }
 
   return count;
