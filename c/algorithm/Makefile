@@ -2,7 +2,7 @@ CC=gcc
 
 .PHONY: clean test all
 
-all: queen hanoi suduku 24-points bulbs permutation
+all: queen hanoi suduku 24-points bulbs permutation combination
 
 queen: queen.c
 	$(CC) -o queen queen.c
@@ -22,8 +22,11 @@ bulbs: bulbs.c
 permutation: permutation.c
 	$(CC) -o permutation permutation.c
 
+combination: combination.c
+	$(CC) -o combination combination.c
+
 clean:
-	rm -f queen hanoi suduku 24-points bulbs permutation a.out *~
+	rm -f queen hanoi suduku 24-points bulbs permutation combination a.out *~
 
 test:
 	./queen
@@ -32,3 +35,4 @@ test:
 	./24-points < data/24-points
 	./bulbs
 	./permutation
+	./combination
