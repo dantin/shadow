@@ -1,6 +1,5 @@
 /*
- * Copyright (c) david
- * All rights reserved.
+ * Copyright (c) david, all rights reserved.
  *
  * filename    : suduku.c
  * version     : 1.0
@@ -201,3 +200,4 @@ void print(void)
   }
   printf("-------------------------\n");
 }
+

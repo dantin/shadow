@@ -1,6 +1,5 @@
 /*
- * Copyright (c) david
- * All rights reserved.
+ * Copyright (c) david, all rights reserved.
  *
  * filename    : 24-points.c
  * version     : 1.0

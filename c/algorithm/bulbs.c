@@ -1,6 +1,5 @@
 /*
- * Copyright (c) david
- * All rights reserved.
+ * Copyright (c) david, all rights reserved.
  *
  * filename    : bulbs.c
  * version     : 1.0

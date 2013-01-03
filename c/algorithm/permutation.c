@@ -1,6 +1,5 @@
 /*
- * Copyright (c) david
- * All rights reserved.
+ * Copyright (c) david, all rights reserved.
  *
  * filename    : permutation.c
  * version     : 1.0
@@ -21,7 +20,7 @@ int main(void)
   char per[] = "ABCD";
 
   int count = permutation(per, 0, strlen(per) - 1);
-  printf("The total: %d\n", count);
+  printf(" Total permutation: %d\n", count);
 
   return 0;
 }
@@ -41,7 +40,10 @@ int permutation(char per[], int m, int len)
   int i;
 
   if(m > len) {
-    printf("%s\n", per);
+    for(i = 0; i <= m; i++) {
+      printf("%c ", per[i]);
+    }
+    printf("\n");
     ++count;
   } else {
 
