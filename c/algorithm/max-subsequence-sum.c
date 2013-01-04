@@ -1,7 +1,15 @@
 /*
+ * Copyright (c) david, all rights reserved.
+ *
+ * filename    : max-subsequence-sum.c
+ * version     : 1.0
+ * author      : david
+ * date        : 2013-01-04
+ * description : 求连续子数组最大和
  *
  */
 #include <stdio.h>
+#include <limits.h>
 
 int max_subsequence_sum_o_n3(const int *array, const int SIZE);
 int max_subsequence_sum_o_n2(const int *array, const int SIZE);
@@ -30,8 +38,9 @@ int main(void)
  */
 int max_subsequence_sum_o_n3(const int a[], const int SIZE)
 {
-  int sum, max = 0, i, j, k;
+  int sum, max, i, j, k;
 
+  max = INT_MIN;
   for(i = 0; i < SIZE; i++) {
     for(j = i; j < SIZE; j++) {
       sum = 0;
@@ -53,8 +62,9 @@ int max_subsequence_sum_o_n3(const int a[], const int SIZE)
  */
 int max_subsequence_sum_o_n2(const int a[], const int SIZE)
 {
-  int sum, max = 0, i, j, k;
+  int sum, max, i, j, k;
 
+  max = INT_MIN;
   for(i = 0; i < SIZE; i++) {
     sum = 0;
     for(j = i; j < SIZE; j++) {
@@ -67,7 +77,9 @@ int max_subsequence_sum_o_n2(const int a[], const int SIZE)
 
   return max;
 }
-
+/*
+ * time efficiency: O(n*log(n))
+ */
 int max_subsequence_sum_o_nlogn(const int a[], int left, int right)
 {
   int maxl, maxr;
@@ -87,7 +99,7 @@ int max_subsequence_sum_o_nlogn(const int a[], int left, int right)
   maxl = max_subsequence_sum_o_nlogn(a, left, c);
   maxr = max_subsequence_sum_o_nlogn(a, c + 1, right);
 
-  maxlb = 0;
+  maxlb = INT_MIN;
   suml = 0;
   for(i = c; i >= left; i--) {
     suml += a[i];
@@ -96,7 +108,7 @@ int max_subsequence_sum_o_nlogn(const int a[], int left, int right)
     }
   }
 
-  maxrb = 0;
+  maxrb = INT_MIN;
   sumr = 0;
   for(i = c + 1; i <= right; i++) {
     sumr += a[i];
@@ -117,7 +129,8 @@ int max_subsequence_sum_o_n1(const int a[], const int SIZE)
 {
   int sum, max, i;
 
-  sum = max = 0;
+  sum = 0;
+  max = INT_MIN;
   for(i = 0; i < SIZE; i++) {
     sum += a[i];
     if(sum > max) {
