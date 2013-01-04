@@ -2,7 +2,7 @@ CC=gcc
 
 .PHONY: clean test all
 
-all: queen hanoi suduku 24-points bulbs permutation combination
+all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum
 
 queen: queen.c
 	$(CC) -o queen queen.c
@@ -25,8 +25,11 @@ permutation: permutation.c
 combination: combination.c
 	$(CC) -o combination combination.c
 
+max-subsequence-sum: max-subsequence-sum.c
+	$(CC) -o max-subsequence-sum max-subsequence-sum.c
+
 clean:
-	rm -f queen hanoi suduku 24-points bulbs permutation combination a.out *~
+	rm -f queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum a.out *~
 
 test:
 	./queen
@@ -36,3 +39,4 @@ test:
 	./bulbs
 	./permutation
 	./combination
+	./max-subsequence-sum
