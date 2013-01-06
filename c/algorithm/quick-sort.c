@@ -12,7 +12,7 @@
 
 void print(const char *message, const int a[], const int length);
 void qsort(int a[], int left, int right);
-void swap(int a[], int i, int j);
+void swap(int *i, int *j);
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
   const int length = sizeof(array) / sizeof(int);
 
   print(" Original array:  ", array, length);
-  qsort(array, 0, length - 1);
+  qsort(array, 0, length);
   print(" After Quick sort:", array, length);
 
   return 0;
@@ -32,7 +32,7 @@ void print(const char *message, const int a[], const int length)
 
   printf("%s [", message);
   for(i = 0; i < length; i++) {
-    printf((i == length - 1) ? "%2d" : "%2d,", a[i]);
+    printf((i == length - 1) ? "%2d" : "%2d, ", a[i]);
   }
   printf("]\n");
 }
@@ -45,23 +45,21 @@ void qsort(int a[], int left, int right)
     return;
   }
 
-  swap(a, left, (left + right) / 2);
-
   last = left;
-  for(i = left + 1; i <= right; i++) {
+  for(i = left + 1; i < right; i++) {
     if(a[i] < a[left]) {
-      swap(a, ++last, i);
+      swap(&a[++last], &a[i]);
     }
   }
 
-  swap(a, left, last);
+  swap(&a[left], &a[last]);
 
-  qsort(a, left, last - 1);
+  qsort(a, left, last);
   qsort(a, last + 1, right);
 }
 
-void swap(int a[], int i, int j) {
-  int temp = a[i];
-  a[i] = a[j];
-  a[j] = temp;
+void swap(int *i, int *j) {
+  int temp = *i;
+  *i = *j;
+  *j = temp;
 }
