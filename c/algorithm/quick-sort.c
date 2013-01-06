@@ -9,19 +9,30 @@
  *
  */
 #include <stdio.h>
+#include <stdlib.h>
 
 void print(const char *message, const int a[], const int length);
-void qsort(int a[], int left, int right);
+void quick_sort(int a[], int left, int right);
 void swap(int *i, int *j);
+
+void read(int *array, const int length);
 
 int main(void)
 {
-  int array[] = {3, 7, 8, 5, 2, 1, 9, 5, 4};
-  const int length = sizeof(array) / sizeof(int);
+  int length;
+  scanf("%d", &length);
+
+  int *array = (int *) malloc (sizeof(int) * length);
+
+  read(array, length);
 
   print(" Original array:  ", array, length);
-  qsort(array, 0, length);
+
+  quick_sort(array, 0, length);
+
   print(" After Quick sort:", array, length);
+
+  free(array);
 
   return 0;
 }
@@ -37,7 +48,7 @@ void print(const char *message, const int a[], const int length)
   printf("]\n");
 }
 
-void qsort(int a[], int left, int right)
+void quick_sort(int a[], int left, int right)
 {
   int i, last;
 
@@ -54,12 +65,21 @@ void qsort(int a[], int left, int right)
 
   swap(&a[left], &a[last]);
 
-  qsort(a, left, last);
-  qsort(a, last + 1, right);
+  quick_sort(a, left, last);
+  quick_sort(a, last + 1, right);
 }
 
 void swap(int *i, int *j) {
   int temp = *i;
   *i = *j;
   *j = temp;
+}
+
+void read(int *array, const int length)
+{
+  int num, i = 0;
+
+  while(scanf("%d", &num) && i < length) {
+    array[i++] = num;
+  }
 }

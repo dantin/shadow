@@ -9,20 +9,31 @@
  *
  */
 #include <stdio.h>
+#include <stdlib.h>
 
 void bsort(int a[], const int length);
 void print(const char *message, const int a[], const int length);
 
 void swap(int *i, int *j);
 
+void read(int *array, const int length);
+
 int main(void)
 {
-  int array[] = {3, 7, 8, 5, 2, 1, 9, 5, 4};
-  const int length = sizeof(array) / sizeof(int);
+  int length;
+  scanf("%d", &length);
+
+  int *array = (int *) malloc (sizeof(int) * length);
+
+  read(array, length);
 
   print(" Original array:   ", array, length);
+  
   bsort(array, length);
+  
   print(" After Bubble sort:", array, length);
+
+  free(array);
 
   return 0;
 }
@@ -46,7 +57,7 @@ void print(const char *message, const int a[], const int length)
 
   printf("%s [", message);
   for(i = 0; i < length; i++) {
-    printf((i == length - 1) ? "%2d" : "%2d, ", a[i]);
+    printf((i == length - 1) ? "%d" : "%d, ", a[i]);
   }
   printf("]\n");
 }
@@ -55,4 +66,13 @@ void swap(int *i, int *j) {
   int temp = *i;
   *i = *j;
   *j = temp;
+}
+
+void read(int *array, const int length)
+{
+  int num, i = 0;
+
+  while(scanf("%d", &num) && i < length) {
+    array[i++] = num;
+  }
 }

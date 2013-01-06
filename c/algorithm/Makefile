@@ -1,6 +1,6 @@
 CC=gcc
 
-.PHONY: clean test all
+.PHONY: clean test all performance
 
 all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator
 
@@ -53,6 +53,10 @@ test:
 	./combination
 	./max-subsequence-sum
 	./big-integer < data/big-integer
-	./quick-sort
-	./bubble-sort
+	./quick-sort < data/sort-100
+	./bubble-sort < data/sort-100
 	./random-generator < data/random-generator
+
+performance:
+	time ./quick-sort 0<data/sort-10000 1>/dev/null
+	time ./bubble-sort 0<data/sort-10000 1>/dev/null
