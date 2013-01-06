@@ -2,7 +2,7 @@ CC=gcc
 
 .PHONY: clean test all
 
-all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort
+all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort
 
 queen: queen.c
 	$(CC) -o queen queen.c
@@ -34,8 +34,11 @@ big-integer: big-integer.c
 quick-sort: quick-sort.c
 	$(CC) -o quick-sort quick-sort.c
 
+bubble-sort: bubble-sort.c
+	$(CC) -o bubble-sort bubble-sort.c
+
 clean:
-	rm -f queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort a.out *~
+	rm -f queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort a.out *~
 
 test:
 	./queen
@@ -48,3 +51,4 @@ test:
 	./max-subsequence-sum
 	./big-integer < data/big-integer
 	./quick-sort
+	./bubble-sort
