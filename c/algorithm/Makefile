@@ -2,7 +2,7 @@ CC=gcc
 
 .PHONY: clean test all performance
 
-all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator
+all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator insert-sort
 
 queen: queen.c
 	$(CC) -o queen queen.c
@@ -40,8 +40,11 @@ bubble-sort: bubble-sort.c
 random-generator: random-generator.c
 	$(CC) -o random-generator random-generator.c
 
+insert-sort: insert-sort.c
+	$(CC) -o insert-sort insert-sort.c
+
 clean:
-	rm -f queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator a.out *~
+	rm -f queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator insert-sort a.out *~
 
 test:
 	./queen
@@ -56,7 +59,9 @@ test:
 	./quick-sort < data/sort-100
 	./bubble-sort < data/sort-100
 	./random-generator < data/random-generator
+	./insert-sort < data/sort-100
 
 performance:
 	time ./quick-sort 0<data/sort-10000 1>/dev/null
 	time ./bubble-sort 0<data/sort-10000 1>/dev/null
+	time ./insert-sort 0<data/sort-10000 1>/dev/null
