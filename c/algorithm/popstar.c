@@ -9,6 +9,7 @@
  *
  */
 #include <stdio.h>
+#include <stdlib.h>
 
 #define SIZE 10
 
@@ -17,10 +18,11 @@
 typedef enum{RED = 'R', YELLOW = 'Y', GREEN = 'G', PINK = 'P', VIOLET = 'V'} color;
 typedef enum{FALSE, TRUE} bool;
 
-typedef struct {
-unsigned int row;
-unsigned int column;
-} position;
+typedef struct lnode {
+  int location;
+  char data;
+  struct lnode *next;
+} list;
 
 bool iscolor(char c);
 void read(char board[]);
@@ -29,6 +31,13 @@ int find(char board[]);
 bool compare(char board[], int target, int source);
 int row(int i);
 int column(int i);
+void set(char board[], int location, list **visited);
+list *make_node(int location, char data);
+void push(list **stack, list *node);
+list *pop(list **stack);
+void travel(const list *head);
+bool exist(const list *head, const int location);
+
 
 int main(void)
 {
@@ -37,10 +46,20 @@ int main(void)
   read(board);
   print(board);
 
-  int p;
-  if((p = find(board)) != -1) {
+  int p = 3 * SIZE + 3;
+  //if((p = find(board)) != -1) {
+    if(p != -1) {
     printf("next target is (%d, %c)\n", row(p), column(p) + 'A');
   }
+
+  printf("\n---\n");
+  list *visited = NULL;
+  set(board, p, &visited);
+  travel(visited);
+
+  printf("\n---\n");
+  print(board);
+
   return 0;
 }
 
@@ -122,7 +141,7 @@ int find(char board[])
     if((c > 0 && c < SIZE && compare(board, r * SIZE + c - 1, i)) ||
        (r > 0 && r < SIZE && compare(board, (r - 1) * SIZE + c, i)) ||
        (c >= 0 && c < SIZE - 1 && compare(board, r * SIZE + c + 1, i)) ||
-       (r >=0 && r < SIZE - 1 && compare(board, (r + 1) * SIZE + c, i))) {
+       (r >= 0 && r < SIZE - 1 && compare(board, (r + 1) * SIZE + c, i))) {
 	return i;
     }
   }
@@ -146,4 +165,87 @@ int row(int i)
 int column(int i)
 {
   return i % SIZE;
+}
+
+void set(char board[], int location, list **visited)
+{
+  list *stack = NULL;
+  *visited = NULL;
+
+  push(&stack, make_node(location, board[location]));
+  while(stack != NULL) {
+    list *node = pop(&stack);
+    int c = column(node->location);
+    int r = row(node->location);
+    int found;
+
+    if(c > 0 && c < SIZE && compare(board, r * SIZE + c - 1, node->location) && !exist(*visited, node->location)) {
+      found = r * SIZE + c - 1;
+      push(&stack, make_node(found, board[found]));
+    }
+    if(r > 0 && r < SIZE && compare(board, (r - 1) * SIZE + c, node->location) && !exist(*visited, node->location)) {
+      found = (r - 1) * SIZE + c;
+      push(&stack, make_node(found, board[found]));
+    }
+    if(c >= 0 && c < SIZE - 1 && compare(board, r * SIZE + c + 1, node->location) && !exist(*visited, node->location)) {
+      found = r * SIZE + c + 1;
+      push(&stack, make_node(found, board[found]));
+    }
+    if(r >= 0 && r < SIZE - 1 && compare(board, (r + 1) * SIZE + c, node->location) && !exist(*visited, node->location)) {
+      found = (r + 1) * SIZE + c;
+      push(&stack, make_node(found, board[found]));
+    }
+
+    if(!exist(*visited, node->location)) {
+      node->next = NULL;
+      push(visited, node);
+      board[node->location] = EMPTY;
+    }
+  }
+
+}
+
+list *make_node(int location, char data)
+{
+  list *node = (list *) malloc(sizeof(list));
+  node->location = location;
+  node->data = data;
+  node->next = NULL;
+
+  return node;
+}
+
+void push(list **stack, list *node)
+{
+  node->next = *stack;
+  *stack = node;
+}
+
+list *pop(list **stack)
+{
+  list *element = *stack;
+  *stack = (*stack)->next;
+
+  element->next = NULL;
+  return element;
+}
+
+void travel(const list *head)
+{
+  while(head) {
+    printf("<%d, %c> : %c\n", row(head->location), 'A' + column(head->location), head->data);
+    head = head->next;
+  }
+}
+
+bool exist(const list *head, const int location)
+{
+  while(head) {
+    if(head->location == location) {
+      return TRUE;
+    }
+    head = head->next;
+  }
+
+  return FALSE;
 }
