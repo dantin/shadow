@@ -37,7 +37,8 @@ void push(list **stack, list *node);
 list *pop(list **stack);
 void travel(const list *head);
 bool exist(const list *head, const int location);
-
+void clear(char board[], char result[]);
+void swap(char *i, char *j);
 
 int main(void)
 {
@@ -55,10 +56,15 @@ int main(void)
   printf("\n---\n");
   list *visited = NULL;
   set(board, p, &visited);
-  travel(visited);
+  //travel(visited);
 
   printf("\n---\n");
   print(board);
+
+  printf("\n---\n");
+  char to[SIZE * SIZE];
+  clear(board, to);
+  print(to);
 
   return 0;
 }
@@ -248,4 +254,30 @@ bool exist(const list *head, const int location)
   }
 
   return FALSE;
+}
+
+void clear(char from[], char to[])
+{
+  int r, c, i;
+  // copy
+  for(i = 0; i < SIZE * SIZE; i++) {
+    to[i] = from [i];
+  }
+
+  for(c = 0; c < SIZE; c++) {
+    for(i = 0; i < SIZE - 1 ; i++) {
+      for(r = SIZE - 1; r > 0; r --) {
+	if(to[r * SIZE + c] == EMPTY) {
+	  swap(&to[r * SIZE + c], &to[(r - 1) * SIZE + c]);
+	}
+      }
+    }
+  }
+}
+
+void swap(char *i, char *j)
+{
+  char temp = *i;
+  *i = *j;
+  *j = temp;
 }
