@@ -273,6 +273,22 @@ void clear(char from[], char to[])
       }
     }
   }
+
+  for(c = 0; c < SIZE; c++) {
+    bool is_clear = TRUE;
+    for(r = 0; r < SIZE; r ++) {
+      is_clear = is_clear && (to[r * SIZE + c] == EMPTY);
+    }
+    if(!is_clear) {
+      continue;
+    }
+    for(i = 0; i < SIZE; i++) {
+      int j;
+      for(j = c; j < SIZE - 1; j++) {
+	swap(&to[i * SIZE + j], &to[i * SIZE + j + 1]);
+      }
+    }
+  }
 }
 
 void swap(char *i, char *j)
