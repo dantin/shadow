@@ -1,0 +1,19 @@
+# 10 * 10 平板
+#
+# 红：1 R
+# 黄：2 Y
+# 绿：3 G
+# 粉：4 P
+# 紫：5 V
+
+Y Y Y Y Y | Y Y Y Y Y
+Y Y Y Y Y | Y Y Y Y Y
+Y Y Y Y Y | Y Y Y Y Y
+Y Y Y Y Y | Y Y Y G G
+Y Y Y Y Y | Y Y Y G G
+---------------------
+Y Y Y Y Y | Y Y Y Y Y
+Y Y Y Y Y | Y Y Y Y Y
+Y Y Y Y Y | Y Y Y Y Y
+Y Y Y Y Y | Y Y Y Y Y
+Y Y Y Y Y | Y Y Y Y Y

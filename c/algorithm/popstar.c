@@ -27,7 +27,7 @@ typedef struct lnode {
 bool iscolor(char c);
 void read(char board[]);
 void print(char board[]);
-int find(char board[]);
+int find(char board[], const int p);
 bool compare(char board[], int target, int source);
 int row(int i);
 int column(int i);
@@ -39,6 +39,9 @@ void travel(const list *head);
 bool exist(const list *head, const int location);
 void clear(char board[], char result[]);
 void swap(char *i, char *j);
+bool popstar(char board[]);
+bool isfinish(char board[]);
+void copy_board(char to[], char from[]);
 
 int main(void)
 {
@@ -46,27 +49,74 @@ int main(void)
 
   read(board);
   print(board);
-
-  int p = 3 * SIZE + 3;
-  //if((p = find(board)) != -1) {
-    if(p != -1) {
-    printf("next target is (%d, %c)\n", row(p), column(p) + 'A');
-  }
-
-  printf("\n---\n");
-  list *visited = NULL;
-  set(board, p, &visited);
-  //travel(visited);
-
-  printf("\n---\n");
-  print(board);
-
-  printf("\n---\n");
-  char to[SIZE * SIZE];
-  clear(board, to);
-  print(to);
+  bool result = popstar(board);
+  printf(result ? "\nClear!\n" : "\nUnsolved\n");
 
   return 0;
+}
+
+bool popstar(char board[])
+{
+  static long count = 0;
+  int p;
+  list *visited = NULL;
+  char working[SIZE * SIZE];
+  char map[SIZE * SIZE];
+  char temp[SIZE * SIZE];
+  list *mark = NULL;
+
+  if(isfinish(board)) {
+    return TRUE;
+  }
+
+  copy_board(map, board);
+  copy_board(working, board);
+  //find a location
+  while((p = find(map, 0)) != -1) {
+    // clear ball at location
+    set(working, p, &visited);
+    clear(working, temp);
+    copy_board(working, temp);
+
+    // recursion popup
+    if(popstar(working)) {
+      // FOUND!
+      return TRUE;
+    }
+    // FAILED
+    printf("case %d failed\n", ++count);
+    //reset
+    while(visited != NULL) {
+      list *node = visited;
+      map[visited->location] = EMPTY;
+      visited = visited->next;
+      free(node);
+    }
+    copy_board(working, board);
+  }
+
+  return FALSE;
+}
+
+void copy_board(char to[], char from[])
+{
+  int i;
+
+  for(i = 0; i < SIZE * SIZE; i++) {
+    to[i] = from[i];
+  }
+}
+
+bool isfinish(char board[])
+{
+  int i;
+
+  for(i = 0; i < SIZE * SIZE; i++) {
+    if(board[i] != EMPTY) {
+      return FALSE;
+    }
+  }
+  return TRUE;
 }
 
 bool iscolor(char c)
@@ -136,11 +186,15 @@ void print(char board[])
   }
 }
 
-int find(char board[])
+int find(char board[], const int p)
 {
   int i;
 
-  for(i = 0; i < SIZE * SIZE; i++) {
+  if(isfinish(board)) {
+    return -1;
+  }
+
+  for(i = p; i < SIZE * SIZE; i++) {
     int c = column(i);
     int r = row(i);
 
@@ -206,6 +260,10 @@ void set(char board[], int location, list **visited)
       node->next = NULL;
       push(visited, node);
       board[node->location] = EMPTY;
+    } else {// should NOT go there
+      //travel(node);
+      //printf("mem leak\n");
+      free(node);
     }
   }
 
@@ -258,11 +316,9 @@ bool exist(const list *head, const int location)
 
 void clear(char from[], char to[])
 {
-  int r, c, i;
-  // copy
-  for(i = 0; i < SIZE * SIZE; i++) {
-    to[i] = from [i];
-  }
+  int r, c, i, j, k;
+
+  copy_board(to, from);
 
   for(c = 0; c < SIZE; c++) {
     for(i = 0; i < SIZE - 1 ; i++) {
@@ -274,18 +330,18 @@ void clear(char from[], char to[])
     }
   }
 
-  for(c = 0; c < SIZE; c++) {
+  for(c = 0, k = 0; k < SIZE; k++) {
     bool is_clear = TRUE;
-    for(r = 0; r < SIZE; r ++) {
+    for(r = 0; r < SIZE; r++) {
       is_clear = is_clear && (to[r * SIZE + c] == EMPTY);
     }
     if(!is_clear) {
+      c++;
       continue;
     }
     for(i = 0; i < SIZE; i++) {
-      int j;
-      for(j = c; j < SIZE - 1; j++) {
-	swap(&to[i * SIZE + j], &to[i * SIZE + j + 1]);
+      for(j = c + 1; j < SIZE; j++) {
+	swap(&to[i * SIZE + j], &to[i * SIZE + j - 1]);
       }
     }
   }
