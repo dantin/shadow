@@ -15,6 +15,19 @@
 static void err_doit(int, const char *, va_list);
 
 /*
+ * Nonfatal error related to a system call.
+ * Print a message and return.
+ */
+void err_ret(const char *fmt, ...)
+{
+  va_list ap;
+
+  va_start(ap, fmt);
+  err_doit(1, fmt, ap);
+  va_end(ap);
+  return;
+}
+/*
  * Fatal error related to a system call
  * Print a message and terminate.
  */

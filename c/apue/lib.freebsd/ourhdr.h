@@ -19,6 +19,7 @@
 
 #define MAXLINE 4096
 
+void err_ret(const char *, ...);
 void err_sys(const char *, ...);
 void err_quit(const char *, ...);
 
