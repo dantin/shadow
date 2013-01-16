@@ -1,7 +1,7 @@
 /*
  * Copyright (c) APUE, all rights reserved.
  *
- * filename    : my.c
+ * filename    : mycat.c
  * version     : 1.0
  * author      : david
  * date        : 2013-01-16
