@@ -7,7 +7,7 @@
  * date        : 2013-01-16
  * description : Copy STDIN to STDOUT
  */
-#include "ourhdr.h"
+#include "../lib.freebsd/ourhdr.h"
 
 int main(void)
 {

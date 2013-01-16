@@ -8,7 +8,7 @@
  * description : Print the process ID
  *
  */
-#include "ourhdr.h"
+#include "../lib.freebsd/ourhdr.h"
 
 int main(void)
 {

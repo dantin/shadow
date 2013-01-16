@@ -12,7 +12,7 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "ourhdr.h"
+#include "../lib.freebsd/ourhdr.h"
 
 int main(int argc, char *argv[])
 {
