@@ -8,7 +8,7 @@
  * description : Print user ID and group ID
  *
  */
-#include "../lib.freebsd/ourhdr.h"
+#include "ourhdr.h"
 
 int main(void)
 {

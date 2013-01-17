@@ -5,16 +5,16 @@ LIB_DIR=../lib.freebsd
 
 all: ${PROGS}
 
-ls1: ls1.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
+ls1: ls1.c ourhdr.h $(LIB_DIR)/error.c
 	$(CC) -o ls1 ls1.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
 
-hello: hello.c $(LIB_DIR)/ourhdr.h
+hello: hello.c ourhdr.h
 	$(CC) -o hello hello.c
 
-testerror: testerror.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
+testerror: testerror.c ourhdr.h $(LIB_DIR)/error.c
 	$(CC) -o testerror testerror.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
 
-uidgid: uidgid.c $(LIB_DIR)/ourhdr.h
+uidgid: uidgid.c ourhdr.h
 	$(CC) -o uidgid uidgid.c
 
 clean:

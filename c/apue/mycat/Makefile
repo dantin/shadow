@@ -6,10 +6,10 @@ LIB_DIR=../lib.freebsd
 
 all: ${PROGS}
 
-mycat: mycat.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
+mycat: mycat.c ourhdr.h $(LIB_DIR)/error.c
 	$(CC) -o mycat mycat.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
 
-getcputc: getcputc.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
+getcputc: getcputc.c ourhdr.h $(LIB_DIR)/error.c
 	$(CC) -o getcputc getcputc.c $(LIB_DIR)/ourhdr.h $(LIB_DIR)/error.c
 
 clean:

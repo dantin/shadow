@@ -7,7 +7,7 @@
  * date        : 2013-01-16
  * description : Copy STDIN to STDOUT
  */
-#include "../lib.freebsd/ourhdr.h"
+#include "ourhdr.h"
 
 #define BUFFERSIZE 8192
 
