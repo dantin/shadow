@@ -144,7 +144,7 @@ int forward( Node *p, Node **end, Node **next )
   if( *end == bstop ) {
     *next = astop;
   } else {
-    *next = astop;
+    *next = bstop;
   }
 
   return size;
