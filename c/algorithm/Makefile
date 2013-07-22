@@ -2,7 +2,7 @@ CC=gcc
 
 .PHONY: clean test all performance
 
-all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator insert-sort
+all: queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator insert-sort overlap
 
 queen: queen.c
 	$(CC) -o queen queen.c
@@ -43,8 +43,11 @@ random-generator: random-generator.c
 insert-sort: insert-sort.c
 	$(CC) -o insert-sort insert-sort.c
 
+overlap: overlap.c
+	$(CC) -o overlap overlap.c
+
 clean:
-	rm -f queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator insert-sort a.out *~
+	rm -f queen hanoi suduku 24-points bulbs permutation combination max-subsequence-sum big-integer quick-sort bubble-sort random-generator insert-sort overlap a.out *~
 
 test:
 	./queen
@@ -60,6 +63,7 @@ test:
 	./bubble-sort < data/sort-100
 	./random-generator < data/random-generator
 	./insert-sort < data/sort-100
+	./overlap < data/overlap
 
 performance:
 	time ./quick-sort 0<data/sort-10000 1>/dev/null
