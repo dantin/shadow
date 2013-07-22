@@ -18,7 +18,7 @@ typedef struct Element {
 
 Node *read(void);
 void longest(Node *string);
-int try( Node *p, Node **end, Node **next );
+int forward( Node *p, Node **end, Node **next );
 
 int main(void)
 {
@@ -58,19 +58,22 @@ Node *read(void)
   return head;
 }
 
+/*
+ * 查找最长的两个不同字符的子串
+ */
 void longest( Node *string )
 {
   Node *max_begin, *max_end;
   int max_length = 0;
 
   while( string != NULL ) {
-    Node *begin = string;
     Node *end, *next;
-    int size = try( begin, &end, &next );
+    end = next = NULL;
+    int size = forward( string, &end, &next );
 
     if( size > max_length ) {
       max_length = size;
-      max_begin = begin;
+      max_begin = string;
       max_end = end;
     }
 
@@ -85,35 +88,54 @@ void longest( Node *string )
   }
 }
 
-int try( Node *p, Node **end, Node **next )
+/*
+ * 从p开始前向搜索含两个不同字符的最长子串
+ * end:  子串结尾的后一个字符
+ * next: 下次一开始搜索的位置，即首字符的最后开始位置
+ *
+ * 例如
+ *       abaacccaade第一次搜索
+ *         ^ ^
+ *         1 2
+ *
+ *    1) next
+ *    2) end
+ */
+int forward( Node *p, Node **end, Node **next )
 {
   char set[2];
-  Node *n;
   int size = 0;
+  int count = 0;
 
   set[0] = p->c;
   set[1] = 0;
 
-  n = p;
-  while( n != NULL ) {
-    if( n->c == set[0] ) {
-      n = n->next;
-      size++;
+  while( p != NULL ) {
+    if( set[0] != 0 && set[1] != 0 && p->c != set[0] && p->c != set[1] ) {
+      break;
+    }
+
+    if( p->c == set[0] ) {
+      count++;
     } else {
-      if( set[1] == 0 ) {
-	set[1] = n->c;
-	n = n->next;
-	size++;
-      } else if( n->c == set[1] ) {
-	n = n->next;
-	*next = n;
-	size++;
-      } else {
-	break;
-      }
+      count = 0;
+    }
+
+    if( p->c != set[0] && set[1] == 0 ) {
+      set[1] = p->c;
+    }
+
+    if( p->c == set[0] && set[1] != 0 && count == 1) {
+      *next = p;
+    }
+
+    if( p->c == set[0] || p->c == set[1] ) {
+      p = p->next;
+      size++;
     }
   }
 
-  *end = n;
+  *end = p;
+
   return size;
 }
