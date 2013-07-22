@@ -69,6 +69,8 @@ test:
 	./overlap < data/overlap
 	./longest < data/longest
 
+## for line in $(cat data/longest); do echo $line;echo $line | ./longest;echo; done
+
 performance:
 	time ./quick-sort 0<data/sort-10000 1>/dev/null
 	time ./bubble-sort 0<data/sort-10000 1>/dev/null

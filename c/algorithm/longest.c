@@ -98,14 +98,21 @@ void longest( Node *string )
  *         ^ ^
  *         1 2
  *
- *    1) next
- *    2) end
+ *    next 1)
+ *    end  2)
+ *
+ *       abcbbdeffg第一次搜索
+ *        ^^
+ *        12
+ *
+ *    next 1)
+ *    end  2)
  */
 int forward( Node *p, Node **end, Node **next )
 {
   char set[2];
+  Node *astop, *bstop;
   int size = 0;
-  int count = 0;
 
   set[0] = p->c;
   set[1] = 0;
@@ -115,18 +122,16 @@ int forward( Node *p, Node **end, Node **next )
       break;
     }
 
-    if( p->c == set[0] ) {
-      count++;
-    } else {
-      count = 0;
-    }
-
     if( p->c != set[0] && set[1] == 0 ) {
       set[1] = p->c;
     }
 
-    if( p->c == set[0] && set[1] != 0 && count == 1) {
-      *next = p;
+    if( set[1] != 0 && p->c == set[1] ) {
+      bstop = p->next;
+    }
+
+    if( set[0] == p->c ) {
+      astop = p->next;
     }
 
     if( p->c == set[0] || p->c == set[1] ) {
@@ -136,6 +141,11 @@ int forward( Node *p, Node **end, Node **next )
   }
 
   *end = p;
+  if( *end == bstop ) {
+    *next = astop;
+  } else {
+    *next = astop;
+  }
 
   return size;
 }
