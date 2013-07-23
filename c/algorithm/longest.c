@@ -111,8 +111,9 @@ void longest( Node *string )
 int forward( Node *p, Node **end, Node **next )
 {
   char set[2];
-  Node *astop, *bstop;
+
   int size = 0;
+  int prevc = 0;
 
   set[0] = p->c;
   set[1] = 0;
@@ -126,26 +127,18 @@ int forward( Node *p, Node **end, Node **next )
       set[1] = p->c;
     }
 
-    if( set[1] != 0 && p->c == set[1] ) {
-      bstop = p->next;
-    }
-
-    if( set[0] == p->c ) {
-      astop = p->next;
+    if( set[1] != 0 && prevc != p->c ) {
+      *next = p;
     }
 
     if( p->c == set[0] || p->c == set[1] ) {
+      prevc = p->c;
       p = p->next;
       size++;
     }
   }
 
   *end = p;
-  if( *end == bstop ) {
-    *next = astop;
-  } else {
-    *next = bstop;
-  }
 
   return size;
 }
