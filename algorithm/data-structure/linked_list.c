@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 
 #include "linked_list.h"
 
@@ -99,11 +100,94 @@ void list_insert_index( LinkedList *list, void *data, long index )
 }
 
 /*
- * 初始条件：线性表list已存在
+ * 插入一个节点，默认采用尾插法
+ */
+void list_insert( LinkedList *list, void *data )
+{
+  list_insert_tail( list, data );
+}
+
+/*
+ * 删除一个节点
  *
+ * key     删除关键字
+ * compare 比较函数，用户自行编写
+ */
+void *list_delete( LinkedList *list, void *key, int (*compare)(const void *, const void *) )
+{
+  void *data;
+  ListNode *p, *t;
+
+  p = list->head;
+
+  // 如果要删除的节点为首节点
+  if( !compare( p->data, key ) ) {
+    t = p;
+    data = p->data;
+    list->head = p->next;
+    free( t );
+    list->size--;
+
+    return data;
+  }
+
+  // 遍历查找符合条件的节点
+  while( p->next != NULL ) {
+    // 只删除第一个符合条件的节点
+    if( !compare( p->next->data, key ) ) {
+      t = p->next;
+      if( p->next == list->tail ) {
+	list->tail = p;
+      }
+      p->next = t->next;
+      data = t->data;
+      free( t );
+      list->size--;
+
+      return data;
+    }
+    p = p->next;
+  }
+
+  return NULL;
+}
+
+/*
+ * 链表遍历
+ *
+ * list   待遍历的线性列表，已存在
+ * handle 节点遍历函数，用户编写
+ */
+void list_traverse( LinkedList *list, void (*handle)(void *) )
+{
+  ListNode *p;
+
+  p = list->head;
+  while( p ) {
+    handle( p->data );
+    p = p->next;
+  }
+}
+
+/*
  * 销毁线性表
+ *
+ * list    待销毁的线性列表，已存在
+ * destroy 销毁节点数据的函数，用户自己编写
  */
 void list_destroy( LinkedList *list, void (*destroy)(void *) )
 {
+  ListNode *p, *t;
 
+  p = list->head;
+  while( p ) {
+    t = p->next;
+    if( destroy ) {
+      destroy( p->data );
+    }
+    free( p );
+    p = t;
+  }
+
+  list->size = 0;
 }

@@ -30,12 +30,26 @@ void list_init( LinkedList *list );
  */
 bool is_empty( LinkedList *list );
 
+/*
+ * 插入一个节点
+ */
+void list_insert( LinkedList *list, void *data );
 // 头插法
 void list_insert_head( LinkedList *list, void *data );
 // 尾插法
 void list_insert_tail( LinkedList *list, void *data );
 // 随插法
 void list_insert_index( LinkedList *list, void *data, long index );
+
+/*
+ * 链表遍历
+ */
+void list_traverse( LinkedList *list, void (*handle)(void *) );
+
+/*
+ * 删除一个节点
+ */
+void *list_delete( LinkedList *list, void *key, int (*compare)(const void *, const void *) );
 
 /*
  * 销毁线性表
