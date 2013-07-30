@@ -170,6 +170,55 @@ void list_traverse( LinkedList *list, void (*handle)(void *) )
 }
 
 /*
+ * 搜索
+ */
+void *list_search( LinkedList *list, void *key, int (*compare)(const void *, const void *) )
+{
+  ListNode *p;
+
+  p = list->head;
+  while( p ) {
+    // 找到，返回找到的数据
+    if( !compare( p->data, key ) ) {
+      return p->data;
+    }
+    p = p->next;
+  }
+
+  // 找不到，返回NULL
+  return NULL;
+}
+
+/*
+ * 获取链表某节点的数据
+ */
+void * get_element( LinkedList *list, long index )
+{
+  long i = 0;
+  ListNode *p;
+
+  p = list->head;
+  while( p && i < index ) {
+    i++;
+    p = p->next;
+  }
+
+  if( p ) {
+    return p->data;
+  }
+
+  return NULL;
+}
+
+/*
+ * 求长度
+ */
+long get_length( LinkedList *list )
+{
+  return list->size;
+}
+
+/*
  * 销毁线性表
  *
  * list    待销毁的线性列表，已存在

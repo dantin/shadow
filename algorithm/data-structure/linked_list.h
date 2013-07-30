@@ -52,6 +52,21 @@ void list_traverse( LinkedList *list, void (*handle)(void *) );
 void *list_delete( LinkedList *list, void *key, int (*compare)(const void *, const void *) );
 
 /*
+ * 搜索
+ */
+void *list_search( LinkedList *list, void *key, int (*compare)(const void *, const void *) );
+
+/*
+ * 获取链表某节点的数据
+ */
+void * get_element( LinkedList *list, long index );
+
+/*
+ * 求长度
+ */
+long get_length( LinkedList *list );
+
+/*
  * 销毁线性表
  */
 void list_destroy( LinkedList *list, void (*destroy)(void *) );
