@@ -1,10 +1,13 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall -g
 
-all: recursive
+all: recursive nonrecursive
 
-recursive: factorial-recursive.o recursive-test.o
-	$(CC) $(CFLAGS) -o recursive factorial-recursive.o recursive-test.o
+recursive: factorial-recursive.o test.o
+	$(CC) $(CFLAGS) -o recursive factorial-recursive.o test.o
+
+nonrecursive: factorial-nonrecursive.o test.o
+	$(CC) $(CFLAGS) -o nonrecursive factorial-nonrecursive.o test.o
 
 factorial-recursive.o:
 	cp ../../include/factorial.h .
@@ -12,10 +15,16 @@ factorial-recursive.o:
 	$(CC) $(CFLAGS) -c -o factorial-recursive.o factorial.c
 	rm factorial.[ch]
 
-recursive-test.o: recursive-test.c
+factorial-nonrecursive.o:
 	cp ../../include/factorial.h .
-	$(CC) $(CFLAGS) -c recursive-test.c
+	cp ../../nonrecursive/factorial.c .
+	$(CC) $(CFLAGS) -c -o factorial-nonrecursive.o factorial.c
+	rm factorial.[ch]
+
+test.o: test.c
+	cp ../../include/factorial.h .
+	$(CC) $(CFLAGS) -c test.c
 	rm factorial.h
 
 clean:
-	rm recursive factorial-recursive.o recursive-test.o
+	rm -f recursive factorial-recursive.o nonrecursive factorial-nonrecursive.o test.o

@@ -1,5 +1,8 @@
 #include "factorial.h"
 
+/*
+ * 阶乘 递归方式实现
+ */
 long factorial( long num )
 {
   if( num <= 0) {
