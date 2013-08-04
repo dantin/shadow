@@ -7,8 +7,33 @@
 /*
  * 构造一个空的线性表
  */
-void list_init( LinkedList *list )
+void init_list( LinkedList *list )
 {
+  list->head = NULL;
+  list->tail = NULL;
+  list->size = 0;
+}
+
+/*
+ * 重置线性表
+ *
+ * list    待重置的线性列表，已存在
+ * clear   销毁节点数据的函数，用户自己编写
+ */
+void clear_list( LinkedList *list, void (*clear)(void *) )
+{
+  ListNode *p, *t;
+
+  p = list->head;
+  while( p ) {
+    t = p->next;
+    if( clear ) {
+      clear( p->data );
+    }
+    free( p );
+    p = t;
+  }
+
   list->head = NULL;
   list->tail = NULL;
   list->size = 0;
@@ -19,10 +44,62 @@ void list_init( LinkedList *list )
  *
  * 若list为空表，返回TRUE，否则返回FALSE
  */
-bool is_empty( LinkedList *list )
+bool is_empty_list( LinkedList *list )
 {
   return ( list->head == NULL );
 }
+
+/*
+ * 返回线性表中元素的个数
+ */
+long list_length( LinkedList *list )
+{
+  return list->size;
+}
+
+/*
+ * 获取线性表中某位置的数据
+ */
+void * get_list_element( LinkedList *list, long index )
+{
+  long i = 0;
+  ListNode *p;
+
+  p = list->head;
+  while( p && i < index ) {
+    i++;
+    p = p->next;
+  }
+
+  if( p ) {
+    return p->data;
+  }
+
+  return NULL;
+}
+
+/*
+ * 搜索线性表中第一个与key满足compare的数据元素的位序
+ */
+long locate_list_element( LinkedList *list, void *key, int (*compare)(const void *, const void *) )
+{
+  ListNode *p;
+  long index = 0;
+
+  p = list->head;
+  while( p ) {
+    // 找到，返回找到的数据元素的位序
+    if( !compare( p->data, key ) ) {
+      index = index;
+      break;
+    }
+    p = p->next;
+    index++;
+  }
+
+  return index;
+}
+
 
 /*
  * 把用户传递来的数据打包为一个链表节点
@@ -169,74 +246,3 @@ void list_traverse( LinkedList *list, void (*handle)(void *) )
   }
 }
 
-/*
- * 搜索
- */
-void *list_search( LinkedList *list, void *key, int (*compare)(const void *, const void *) )
-{
-  ListNode *p;
-
-  p = list->head;
-  while( p ) {
-    // 找到，返回找到的数据
-    if( !compare( p->data, key ) ) {
-      return p->data;
-    }
-    p = p->next;
-  }
-
-  // 找不到，返回NULL
-  return NULL;
-}
-
-/*
- * 获取链表某节点的数据
- */
-void * get_element( LinkedList *list, long index )
-{
-  long i = 0;
-  ListNode *p;
-
-  p = list->head;
-  while( p && i < index ) {
-    i++;
-    p = p->next;
-  }
-
-  if( p ) {
-    return p->data;
-  }
-
-  return NULL;
-}
-
-/*
- * 求长度
- */
-long get_length( LinkedList *list )
-{
-  return list->size;
-}
-
-/*
- * 销毁线性表
- *
- * list    待销毁的线性列表，已存在
- * destroy 销毁节点数据的函数，用户自己编写
- */
-void list_destroy( LinkedList *list, void (*destroy)(void *) )
-{
-  ListNode *p, *t;
-
-  p = list->head;
-  while( p ) {
-    t = p->next;
-    if( destroy ) {
-      destroy( p->data );
-    }
-    free( p );
-    p = t;
-  }
-
-  list->size = 0;
-}
