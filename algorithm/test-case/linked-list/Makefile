@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -std=c99 -g
 
 list_test: linked_list.o test.o
 	$(CC) $(CFLAGS) -o list_test linked_list.o test.o

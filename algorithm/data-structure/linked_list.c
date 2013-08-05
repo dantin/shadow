@@ -62,7 +62,7 @@ bool is_empty_list( LinkedList *list )
 /*
  * 返回线性表中元素的个数
  */
-long list_length( LinkedList *list )
+long list_size( LinkedList *list )
 {
   return list->size;
 }
@@ -116,17 +116,20 @@ long locate_list_element( LinkedList *list, void *key, int (*compare)(const void
 void * get_previous_element( LinkedList *list, long location )
 {
   ListNode *previous, *current;
+  long i = 0;
 
-  if( location <= 0 || location > list_size( list ) ) {
+  if( location <= 0 || location >= list_size( list ) ) {
     return NULL;
   }
 
   previous = current = NULL;
-  for( current = list->head; location > 0; current = current->next ) {
+
+  for( current = list->head; current && i < location; current = current->next ) {
     previous = current;
+    i++;
   }
 
-  if( previous != NULL ) {
+  if( i == location ) {
     return previous->data;
   } else {
     return NULL;
@@ -139,22 +142,24 @@ void * get_previous_element( LinkedList *list, long location )
 void * get_next_element( LinkedList *list, long location )
 {
   ListNode *current;
+  long i = 0;
 
-  if( location < 0 || location >= list_size( list ) ) {
+  if( location < 0 || location >= list_size( list ) - 1 ) {
     return NULL;
   }
 
-  for( current = list->head; location > 0; current = current->next )
-    ;
+  for( current = list->head; current && i < location; current = current->next ) {
+    i++;
+  }
 
-  if( current != NULL && current->next != NULL ) {
+  if( i == location ) {
     return current->next->data;
   } else {
     return NULL;
   }
 }
 /*
- * 把用户传递来的数据打包为一个链表节点
+ * 把用户传递来的数据打包为一个线性表节点
  */
 static ListNode *make_node( void *data )
 {
@@ -257,6 +262,7 @@ void *list_delete( LinkedList *list, long index )
 {
   void *data;
   ListNode *p, *t;
+  long i = 0;
 
   p = list->head;
 
@@ -274,8 +280,23 @@ void *list_delete( LinkedList *list, long index )
     return data;
   }
 
-  // 遍历查找符合条件的节点
-  //TODO
+  // 遍历查找目标节点
+  while( p && i < index ) {
+    t = p;
+    p = p->next;
+    i++;
+  }
+
+  if( p ) {
+    data = p->data;
+    t->next = p->next;
+    free( p );
+    list->size--;
+    if( t->next == NULL ) {
+      list->tail = t;
+    }
+    return data;
+  }
   
   return NULL;
 }
