@@ -30,6 +30,11 @@ typedef struct {
 void init_list( LinkedList *list );
 
 /*
+ * 销毁线性表
+ */
+void destroy_list( LinkedList *list, void (*clear)(void *) );
+
+/*
  * 重置线性表，将线性表重置为空表
  */
 void clear_list( LinkedList *list, void (*clear)(void *) );
@@ -55,26 +60,28 @@ void * get_list_element( LinkedList *list, long index );
 long locate_list_element( LinkedList *list, void *key, int (*compare)(const void *, const void *) );
 
 /*
+ * 搜索线性表中前驱节点
+ */
+void * get_previous_element( LinkedList *list, long location );
+
+/*
+ * 搜索线性表中的后继节点
+ */
+void * get_next_element( LinkedList *list, long location );
+
+/*
  * 插入一个节点
  */
-void list_insert( LinkedList *list, void *data );
-// 头插法
-void list_insert_head( LinkedList *list, void *data );
-// 尾插法
-void list_insert_tail( LinkedList *list, void *data );
-// 随插法
-void list_insert_index( LinkedList *list, void *data, long index );
+void list_insert( LinkedList *list, void *data, long index );
+
+/*
+ * 删除一个节点
+ */
+void *list_delete( LinkedList *list, long index );
 
 /*
  * 链表遍历
  */
 void list_traverse( LinkedList *list, void (*handle)(void *) );
-
-/*
- * 删除一个节点
- */
-void *list_delete( LinkedList *list, void *key, int (*compare)(const void *, const void *) );
-
-
 
 #endif

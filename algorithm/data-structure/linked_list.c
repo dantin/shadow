@@ -15,6 +15,16 @@ void init_list( LinkedList *list )
 }
 
 /*
+ * 销毁线性表
+ */
+void destroy_list( LinkedList *list, void (*clear)(void *) )
+{
+  clear_list( list, clear );
+  free( list );
+  list = NULL;
+}
+
+/*
  * 重置线性表
  *
  * list    待重置的线性列表，已存在
@@ -100,7 +110,49 @@ long locate_list_element( LinkedList *list, void *key, int (*compare)(const void
   return index;
 }
 
+/*
+ * 搜索线性表中前驱节点
+ */
+void * get_previous_element( LinkedList *list, long location )
+{
+  ListNode *previous, *current;
 
+  if( location <= 0 || location > list_size( list ) ) {
+    return NULL;
+  }
+
+  previous = current = NULL;
+  for( current = list->head; location > 0; current = current->next ) {
+    previous = current;
+  }
+
+  if( previous != NULL ) {
+    return previous->data;
+  } else {
+    return NULL;
+  }
+}
+
+/*
+ * 搜索线性表中的后继节点
+ */
+void * get_next_element( LinkedList *list, long location )
+{
+  ListNode *current;
+
+  if( location < 0 || location >= list_size( list ) ) {
+    return NULL;
+  }
+
+  for( current = list->head; location > 0; current = current->next )
+    ;
+
+  if( current != NULL && current->next != NULL ) {
+    return current->next->data;
+  } else {
+    return NULL;
+  }
+}
 /*
  * 把用户传递来的数据打包为一个链表节点
  */
@@ -118,7 +170,7 @@ static ListNode *make_node( void *data )
 /*
  * 头插法
  */
-void list_insert_head( LinkedList *list, void *data )
+static void list_insert_head( LinkedList *list, void *data )
 {
   ListNode *node = make_node( data );
 
@@ -137,7 +189,7 @@ void list_insert_head( LinkedList *list, void *data )
 /*
  * 尾插法
  */
-void list_insert_tail( LinkedList *list, void *data )
+static void list_insert_tail( LinkedList *list, void *data )
 {
   ListNode *node = make_node( data );
 
@@ -154,16 +206,35 @@ void list_insert_tail( LinkedList *list, void *data )
 }
 
 /*
- * 随插法
+ * 插入一个节点
+ *
+ * 位置index之前，0 <= index <= list_size( list )
  */
-void list_insert_index( LinkedList *list, void *data, long index )
+void list_insert( LinkedList *list, void *data, long index )
 {
-  long i = 1;
+  long i = 0;
   ListNode *p, *node;
+
+  // 越界
+  if( index < 0 || index > list_size( list ) ) {
+    return;
+  }
+
+  // 线性表头部插入
+  if( index == 0 ) {
+    list_insert_head( list, data );
+    return;
+  }
+
+  // 线性表尾部插入
+  if( index == list_size( list ) ) {
+    list_insert_tail( list, data );
+    return;
+  }
 
   p = list->head;
 
-  while( p && i < index ) {
+  while( p && i < index - 1 ) {
     p = p->next;
     i++;
   }
@@ -177,20 +248,12 @@ void list_insert_index( LinkedList *list, void *data, long index )
 }
 
 /*
- * 插入一个节点，默认采用尾插法
- */
-void list_insert( LinkedList *list, void *data )
-{
-  list_insert_tail( list, data );
-}
-
-/*
  * 删除一个节点
  *
  * key     删除关键字
  * compare 比较函数，用户自行编写
  */
-void *list_delete( LinkedList *list, void *key, int (*compare)(const void *, const void *) )
+void *list_delete( LinkedList *list, long index )
 {
   void *data;
   ListNode *p, *t;
@@ -198,34 +261,22 @@ void *list_delete( LinkedList *list, void *key, int (*compare)(const void *, con
   p = list->head;
 
   // 如果要删除的节点为首节点
-  if( !compare( p->data, key ) ) {
+  if( index == 0 ) {
     t = p;
     data = p->data;
     list->head = p->next;
     free( t );
     list->size--;
+    if( list->size == 0 ) {
+      list->tail = NULL;
+    }
 
     return data;
   }
 
   // 遍历查找符合条件的节点
-  while( p->next != NULL ) {
-    // 只删除第一个符合条件的节点
-    if( !compare( p->next->data, key ) ) {
-      t = p->next;
-      if( p->next == list->tail ) {
-	list->tail = p;
-      }
-      p->next = t->next;
-      data = t->data;
-      free( t );
-      list->size--;
-
-      return data;
-    }
-    p = p->next;
-  }
-
+  //TODO
+  
   return NULL;
 }
 
