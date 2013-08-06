@@ -38,7 +38,7 @@ void destroy_list( LinkedList *list, void (*clear)(void *) )
  */
 void clear_list( LinkedList *list, void (*clear)(void *) )
 {
-  ListNode *p, *t;
+  LinkedListNode *p, *t;
 
   p = list->head;
   while( p ) {
@@ -90,7 +90,7 @@ long list_size( LinkedList *list )
  */
 void * get_list_element( LinkedList *list, long i )
 {
-  ListNode *p;
+  LinkedListNode *p;
 
   assert( i >= 0 );
 
@@ -117,7 +117,7 @@ void * get_list_element( LinkedList *list, long i )
  */
 long locate_list_element( LinkedList *list, void *key, int (*compare)(const void *, const void *) )
 {
-  ListNode *p;
+  LinkedListNode *p;
   long i = 0;
   long result = -1;
 
@@ -146,7 +146,7 @@ long locate_list_element( LinkedList *list, void *key, int (*compare)(const void
  */
 void * get_previous_element( LinkedList *list, long i )
 {
-  ListNode *prev, *curr;
+  LinkedListNode *prev, *curr;
 
   assert( i > 0 );
 
@@ -172,7 +172,7 @@ void * get_previous_element( LinkedList *list, long i )
  */
 void * get_next_element( LinkedList *list, long i )
 {
-  ListNode *curr;
+  LinkedListNode *curr;
 
   assert( i >= 0 );
 
@@ -192,9 +192,9 @@ void * get_next_element( LinkedList *list, long i )
  *
  * data  用户数据
  */
-static ListNode *make_node( void *data )
+static LinkedListNode *make_node( void *data )
 {
-  ListNode *node = (ListNode *) malloc( sizeof( ListNode ) );
+  LinkedListNode *node = (LinkedListNode *) malloc( sizeof( LinkedListNode ) );
 
   assert( node != NULL );
 
@@ -212,7 +212,7 @@ static ListNode *make_node( void *data )
  */
 static void list_insert_head( LinkedList *list, void *data )
 {
-  ListNode *node = make_node( data );
+  LinkedListNode *node = make_node( data );
 
   // 当前线性表为空
   if( list->head == NULL ) {
@@ -233,7 +233,7 @@ static void list_insert_head( LinkedList *list, void *data )
  */
 static void list_insert_tail( LinkedList *list, void *data )
 {
-  ListNode *node = make_node( data );
+  LinkedListNode *node = make_node( data );
 
   if( list->head == NULL ) {
     // 当前链表为空
@@ -256,7 +256,7 @@ static void list_insert_tail( LinkedList *list, void *data )
  */
 void list_insert( LinkedList *list, void *data, long i )
 {
-  ListNode *p, *node;
+  LinkedListNode *p, *node;
 
   // 线性表头部插入
   if( i == 0 ) {
@@ -294,7 +294,7 @@ void list_insert( LinkedList *list, void *data, long i )
 void *list_delete( LinkedList *list, long i )
 {
   void *data;
-  ListNode *p, *t;
+  LinkedListNode *p, *t;
 
   p = list->head;
 
@@ -339,7 +339,7 @@ void *list_delete( LinkedList *list, long i )
  */
 void list_traverse( LinkedList *list, void (*handle)(void *) )
 {
-  ListNode *p;
+  LinkedListNode *p;
 
   for( p = list->head; p ; p = p->next ) {
     if( handle ) {

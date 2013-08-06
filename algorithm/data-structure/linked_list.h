@@ -10,22 +10,22 @@
 /*
  * 节点结构
  */
-typedef struct ListNodeTag {
+typedef struct LinkedListNodeTag {
   void *data;
-  struct ListNodeTag *next;
-} ListNode;
+  struct LinkedListNodeTag *next;
+} LinkedListNode;
 
 /*
  * 链表结构
  */
 typedef struct {
-  ListNode *head;
-  ListNode *tail;
+  LinkedListNode *head;
+  LinkedListNode *tail;
   long size;
 } LinkedList;
 
 /*
- * 构造一个空的线性表h
+ * 构造一个空的线性表
  *
  * list   目标线性表指针
  */
