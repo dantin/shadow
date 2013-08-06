@@ -7,6 +7,29 @@ typedef struct ElementNode {
   int intVal;
 } Element;
 
+int equal( const void *value1, const void *value2 )
+{
+  Element *value = ( Element * ) value1;
+  Element *base = ( Element * ) value2;
+
+  if( value->intVal == base->intVal ) {
+    return 0;
+  } else if( value->intVal < base->intVal ) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+void clear( void *elem )
+{
+  Element *element = ( Element * ) elem;
+
+  if( element ) {
+    free( element );
+  }
+}
+
 void print_element( void *data ) {
   Element *elem = ( Element * ) data;
   printf( "{int: %d} ", elem->intVal);
@@ -26,7 +49,6 @@ void print( LinkedList *list )
 int main( void )
 {
   LinkedList list;
-  Element array[10];
   Element *target;
 
   printf( "构造一个新的线性表\n" );
@@ -35,8 +57,9 @@ int main( void )
 
   printf( "在表尾部增加新节点\n" );
   for( int i = 0; i < 10; i++ ) {
-    array[i].intVal = i;
-    list_insert( &list, &array[i], list_size( &list ) );
+    Element *element = ( Element * ) malloc( sizeof( Element ) );
+    element->intVal = i;
+    list_insert( &list, element, list_size( &list ) );
   }
   print( &list );
 
@@ -93,6 +116,17 @@ int main( void )
   printf( "删除表头节点\n" );
   list_delete( &list, 0 );
   print( &list );
+
+  printf( "搜索线性表中值为10的元素\n" );
+  target->intVal = 10;
+  print_element( get_list_element( &list, locate_list_element( &list, target, equal ) ) );
+
+  printf( "\n重置线性表\n" );
+  clear_list( &list, clear );
+
+  print( &list );
+
+  clear( target );
 
   return 0;
 }
