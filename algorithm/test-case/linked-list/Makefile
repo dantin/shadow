@@ -14,3 +14,5 @@ init:
 	cp ../../data-structure/linked_list.h .
 	cp ../../data-structure/linked_list.c .
 
+clean:
+	rm linked_list.h linked_list.c test.o linked_list.o list_test
