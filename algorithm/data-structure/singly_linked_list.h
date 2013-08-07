@@ -49,7 +49,7 @@ Status destroy_list_node( SinglyLinkedListNode **node );
 Status init_list( SinglyLinkedList *list );
 
 /*
- * 将线性表重置为空表，并释放原链表节点空间
+ * 将单链线性表重置为空表，并释放原链表节点空间
  *
  * list   目标线性表指针
  * clear  清理函数，用户提供
@@ -84,7 +84,7 @@ long list_size( SinglyLinkedList *list );
  * index  元素下标
  * node   返回的目标节点地址
  */
-Status locate_list_element_position( SinglyLinkedList *list, long index, SinglyLinkedListNode **node );
+Status locate_list_element( SinglyLinkedList *list, long index, SinglyLinkedListNode **node );
 
 /*
  * 搜索单链线性表中与key满足compare关系的的第一个数据节点地址
@@ -174,14 +174,14 @@ Status list_remove_tail( SinglyLinkedList *list, SinglyLinkedListNode **node );
 Status list_delete( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode **node );
 
 /*
- * 返回单链线性链表的表头位置
+ * 返回单链线性表的表头位置
  *
  * list   目标线性表指针
  */
 SinglyLinkedListNode *get_list_head( SinglyLinkedList *list );
 
 /*
- * 返回线性链表的表尾位置
+ * 返回单链线性表的表尾位置
  *
  * list   目标线性表指针
  */
@@ -203,7 +203,7 @@ Status set_list_element( SinglyLinkedListNode **pos, void *data );
 void *get_list_element( SinglyLinkedListNode *pos );
 
 /*
- * 链表遍历
+ * 单链线性表遍历
  *
  * list    目标线性表指针
  * handle  函数句柄，对线性表中的每一个元素做相应的操作
