@@ -2,7 +2,7 @@
 #define __LINKED_LIST_H__
 
 /*
- * 通用链式线性表
+ * 理论上通用链式线性表
  */
 
 #include <stdbool.h>
