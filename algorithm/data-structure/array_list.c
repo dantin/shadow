@@ -159,8 +159,8 @@ void list_insert( ArrayList *list, void *data, long index )
     list->limit += ARRAY_LIST_INCREMENT;
   }
 
-  ArrayListNode *p, *location = list->elements + index;
-  for( p = list->elements + list_size( list ) - 1; p >= location; p-- ) {
+  ArrayListNode *location = list->elements + index;
+  for( ArrayListNode *p = list->elements + list_size( list ) - 1; p >= location; p-- ) {
     *( p + 1 ) = *p;
   }
   location->data = data;
@@ -182,14 +182,14 @@ void *list_delete( ArrayList *list, long index )
     return NULL;
   }
 
-  ArrayListNode *p, *q;
+  ArrayListNode *p;
   void *result;
   p = list->elements + index;
   result = p->data;
-  for( q = list->elements + list_size( list ), ++p; p < q; ++p ) {
+  for( p++; p < list->elements + list_size( list ); p++ ) {
     *( p - 1 ) = *p;
   }
-  --list->size;
+  list->size--;
 
   return result;
 }
@@ -202,9 +202,9 @@ void *list_delete( ArrayList *list, long index )
  */
 void list_traverse( ArrayList *list, void (*handle)(void *) )
 {
-  for( long i = 0; i < list_size( list ); i++ ) {
+  for( ArrayListNode *p = list->elements; p < list->elements + list_size( list ); p++ ) {
     if( handle ) {
-      handle( ( list->elements + i )->data );
+      handle( p->data );
     }
   }
 }
