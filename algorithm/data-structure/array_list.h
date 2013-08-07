@@ -8,7 +8,7 @@
 #include <stdbool.h>
 
 #define ARRAY_LIST_INIT_SIZE 50
-#define ARRAY_LIST_INCREMENT 20
+#define ARRAY_LIST_INCREMENT 50
 
 /*
  * 顺序线性表节点结构

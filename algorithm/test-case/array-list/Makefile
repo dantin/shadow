@@ -1,0 +1,18 @@
+CC = gcc
+CFLAGS = -Wall -std=c99 -g
+
+list_test: array_list.o test.o
+	$(CC) $(CFLAGS) -o list_test array_list.o test.o
+
+array_list.o: init array_list.h array_list.c
+	$(CC) $(CFLAGS) -c array_list.c
+
+test.o: init array_list.h test.c
+	$(CC) $(CFLAGS) -c test.c
+
+init:
+	cp ../../data-structure/array_list.h .
+	cp ../../data-structure/array_list.c .
+
+clean:
+	rm array_list.h array_list.c test.o array_list.o list_test
