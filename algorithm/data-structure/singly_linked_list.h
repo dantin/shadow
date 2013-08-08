@@ -54,7 +54,7 @@ Status init_list( SinglyLinkedList *list );
  * list   目标线性表指针
  * clear  清理函数，用户提供
  */
-Status clear_list( SinglyLinkedList *list, void ( *clear )( void * ) );
+Status clear_list( SinglyLinkedList *list, Status ( *clear )( void * ) );
 
 /*
  * 判断单链线性表是否为空表
@@ -84,7 +84,7 @@ long list_size( SinglyLinkedList *list );
  * index  元素下标
  * node   返回的目标节点地址
  */
-Status locate_list_element_position( SinglyLinkedList *list, long index, SinglyLinkedListNode **node );
+Status locate_list_node_by_position( SinglyLinkedList *list, long index, SinglyLinkedListNode **node );
 
 /*
  * 搜索单链线性表中与key满足compare关系的的第一个数据节点地址
@@ -96,7 +96,7 @@ Status locate_list_element_position( SinglyLinkedList *list, long index, SinglyL
  * key       目标元素
  * compare   函数指针，定义目标元素和数据元素之间关系
  */
-SinglyLinkedListNode *locate_list_element( SinglyLinkedList *list, void *key, int (*compare)(const void *, const void *) );
+SinglyLinkedListNode *locate_list_node_by_locator( SinglyLinkedList *list, void *key, int (*compare)(const void *, const void *) );
 
 /*
  * 搜索单链线性表中目标节点的前驱节点地址
@@ -104,7 +104,7 @@ SinglyLinkedListNode *locate_list_element( SinglyLinkedList *list, void *key, in
  * list   目标线性表指针
  * pos    目标节点
  */
-SinglyLinkedListNode * get_previous_position( SinglyLinkedList *list, SinglyLinkedListNode *pos );
+SinglyLinkedListNode *get_previous_node( SinglyLinkedList *list, SinglyLinkedListNode *pos );
 
 /*
  * 搜索单链线性表中目标节点的后继节点地址
@@ -112,7 +112,7 @@ SinglyLinkedListNode * get_previous_position( SinglyLinkedList *list, SinglyLink
  * list   目标线性表指针
  * pos    目标节点
  */
-SinglyLinkedListNode *get_next_position( SinglyLinkedList *list, SinglyLinkedListNode *pos );
+SinglyLinkedListNode * get_next_node( SinglyLinkedList *list, SinglyLinkedListNode *pos );
 
 /*
  * 将节点插入单链线性表表头
@@ -120,7 +120,7 @@ SinglyLinkedListNode *get_next_position( SinglyLinkedList *list, SinglyLinkedLis
  * list      目标线性表指针
  * node      待插节点指针
  */
-Status list_insert_head( SinglyLinkedList *list, SinglyLinkedListNode *node );
+Status insert_list_head( SinglyLinkedList *list, SinglyLinkedListNode *node );
 
 /*
  * 将节点插入单链线性表表尾
@@ -128,7 +128,7 @@ Status list_insert_head( SinglyLinkedList *list, SinglyLinkedListNode *node );
  * list      目标线性表指针
  * node      待插节点指针
  */
-Status list_append_tail( SinglyLinkedList *list, SinglyLinkedListNode *node );
+Status append_list_tail( SinglyLinkedList *list, SinglyLinkedListNode *node );
 
 /*
  * 将节点插入单链线性表中某一位置之前
@@ -137,7 +137,7 @@ Status list_append_tail( SinglyLinkedList *list, SinglyLinkedListNode *node );
  * data    目标插入位置
  * index   目标节点
  */
-Status list_insert( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode *node );
+Status insert_before_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode *node );
 
 /*
  * 将节点插入单链线性表中某一位置之后
@@ -146,7 +146,7 @@ Status list_insert( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLi
  * pos     目标插入位置
  * node    目标节点
  */
-Status list_append( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode *node );
+Status append_after_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode *node );
 
 /*
  * 删除单链线性表表头节点，并以node返回
@@ -154,7 +154,7 @@ Status list_append( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLi
  * list    目标线性表指针
  * node    返回的表头节点
  */
-Status list_delete_head( SinglyLinkedList *list, SinglyLinkedListNode **node );
+Status delete_list_head( SinglyLinkedList *list, SinglyLinkedListNode **node );
 
 /*
  * 删除单链线性表表尾节点，并以node返回
@@ -162,16 +162,15 @@ Status list_delete_head( SinglyLinkedList *list, SinglyLinkedListNode **node );
  * list    目标线性表指针
  * node    返回的表尾节点
  */
-Status list_remove_tail( SinglyLinkedList *list, SinglyLinkedListNode **node );
+Status remove_list_tail( SinglyLinkedList *list, SinglyLinkedListNode **node );
 
 /*
  * 删除一个节点
  *
  * list   目标线性表指针
  * pos    待删除节点位置
- * node   返回的节点
  */
-Status list_delete( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode **node );
+Status delete_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos );
 
 /*
  * 返回单链线性表的表头位置
@@ -193,7 +192,7 @@ SinglyLinkedListNode *get_list_tail( SinglyLinkedList *list );
  * node   目标节点
  * data   数据内容
  */
-Status set_list_element( SinglyLinkedListNode **pos, void *data );
+Status set_list_element( SinglyLinkedListNode *pos, void *data );
 
 /*
  * 获取节点内容
