@@ -39,7 +39,7 @@ Status make_list_node( SinglyLinkedListNode **node, void *data );
  *
  * node   待释放的节点地址
  */
-Status destroy_list_node( SinglyLinkedListNode **node );
+void destroy_list_node( SinglyLinkedListNode **node );
 
 /*
  * 构造一个空的单链线性表
@@ -84,7 +84,7 @@ long list_size( SinglyLinkedList *list );
  * index  元素下标
  * node   返回的目标节点地址
  */
-Status locate_list_element( SinglyLinkedList *list, long index, SinglyLinkedListNode **node );
+Status locate_list_element_position( SinglyLinkedList *list, long index, SinglyLinkedListNode **node );
 
 /*
  * 搜索单链线性表中与key满足compare关系的的第一个数据节点地址
