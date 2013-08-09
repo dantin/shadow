@@ -26,8 +26,6 @@ void destroy_list_node( SinglyLinkedListNode **node )
 
 Status init_list( SinglyLinkedList *list )
 {
-  list = ( SinglyLinkedList * ) malloc( sizeof( SinglyLinkedList ) );
-
   if( !list ) {
     return false;
   }
@@ -52,6 +50,9 @@ Status clear_list( SinglyLinkedList *list, Status ( *clear )( void * ) )
       break;
     }
   }
+  list->head = NULL;
+  list->tail = NULL;
+  list->size = 0;
 
   return status;
 }
