@@ -192,14 +192,14 @@ SinglyLinkedListNode *get_list_tail( SinglyLinkedList *list );
  * node   目标节点
  * data   数据内容
  */
-Status set_list_element( SinglyLinkedListNode *pos, void *data );
+Status set_list_node_content( SinglyLinkedListNode *pos, void *data );
 
 /*
  * 获取节点内容
  *
  * node   目标节点
  */
-void *get_list_element( SinglyLinkedListNode *pos );
+void *get_list_node_content( SinglyLinkedListNode *pos );
 
 /*
  * 单链线性表遍历

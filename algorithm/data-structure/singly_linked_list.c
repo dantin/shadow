@@ -40,8 +40,13 @@ Status init_list( SinglyLinkedList *list )
 Status clear_list( SinglyLinkedList *list, Status ( *clear )( void * ) )
 {
   Status status = true;
+  SinglyLinkedListNode *p, *t;
 
-  for( SinglyLinkedListNode *p = get_list_head( list ); p; p = p->next ) {
+  p = get_list_head( list );
+  while( p ) {
+    t = p->next;
+    list->head = p;
+
     if( clear ) {
       status = clear( p->data );
     }
@@ -49,10 +54,16 @@ Status clear_list( SinglyLinkedList *list, Status ( *clear )( void * ) )
     if( !status ) {
       break;
     }
+    destroy_list_node( &p );
+    list->size--;
+    p = t;
   }
-  list->head = NULL;
-  list->tail = NULL;
-  list->size = 0;
+
+  if( status ) {
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+  }
 
   return status;
 }
@@ -242,6 +253,7 @@ Status remove_list_tail( SinglyLinkedList *list, SinglyLinkedListNode **node )
     return true;
   } else if( ( previous = get_previous_node( list, *node ) ) != NULL ) {
     list->tail = previous;
+    previous->next = NULL;
     list->size--;
     return true;
   } else {
@@ -280,7 +292,7 @@ SinglyLinkedListNode *get_list_tail( SinglyLinkedList *list )
   return list->tail;
 }
 
-Status set_list_element( SinglyLinkedListNode *pos, void *data )
+Status set_list_node_content( SinglyLinkedListNode *pos, void *data )
 {
   if( pos == NULL || data == NULL ) {
     return false;
@@ -290,7 +302,7 @@ Status set_list_element( SinglyLinkedListNode *pos, void *data )
   return true;
 }
 
-void *get_list_element( SinglyLinkedListNode *pos )
+void *get_list_node_content( SinglyLinkedListNode *pos )
 {
   return pos->data;
 }
