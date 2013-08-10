@@ -305,7 +305,7 @@ Status set_list_node_content( SinglyLinkedListNode *pos, void *data )
 
 void *get_list_node_content( SinglyLinkedListNode *pos )
 {
-  return pos->data;
+  return pos ? pos->data : NULL;
 }
 
 Status list_traverse( SinglyLinkedList *list, Status (*handle)(void *) )
