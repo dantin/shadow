@@ -119,7 +119,7 @@ SinglyLinkedListNode *get_previous_node( SinglyLinkedList *list, SinglyLinkedLis
     p = c;
   }
 
-  if( c == pos ) {
+  if( c && c == pos ) {
     return p;
   } else {
     return NULL;
@@ -136,7 +136,7 @@ SinglyLinkedListNode *get_next_node( SinglyLinkedList *list, SinglyLinkedListNod
     }
   }
 
-  if( p == pos ) {
+  if( p && p == pos ) {
     return p->next;
   } else {
     return NULL;
