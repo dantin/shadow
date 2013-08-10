@@ -233,6 +233,8 @@ Status delete_list_head( SinglyLinkedList *list, SinglyLinkedListNode **node )
     list->tail = NULL;
   }
 
+  ( *node )->next = NULL;
+
   return true;
 }
 
