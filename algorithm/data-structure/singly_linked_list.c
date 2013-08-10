@@ -81,13 +81,12 @@ long list_size( SinglyLinkedList *list )
 Status locate_list_node_by_position( SinglyLinkedList *list, long index, SinglyLinkedListNode **node )
 {
   SinglyLinkedListNode *p;
-  long i;
 
-  for( p = get_list_head( list ), i = 0; p && i < index; p = p->next ) {
-    i++;
+  for( p = get_list_head( list ); p && index > 0; p = p->next ) {
+    index--;
   }
 
-  if( p && i == index ) {
+  if( p && 0 == index ) {
     *node = p;
     return true;
   } else {
@@ -165,7 +164,7 @@ Status insert_list_head( SinglyLinkedList *list, SinglyLinkedListNode *node )
 
 Status append_list_tail( SinglyLinkedList *list, SinglyLinkedListNode *node )
 {
-  if( node == NULL ) {
+  if( node == NULL || node->next != NULL ) {
     return false;
   }
 
