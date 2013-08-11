@@ -223,7 +223,7 @@ int main( void )
   set_list_node_content( target, third );
   print( &list );
 
-  clear( third );
+  third = NULL;
 
   clear_list( &list, clear );
   
