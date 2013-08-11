@@ -164,6 +164,7 @@ int main( void )
   delete_list_head( &list, &target );
   printf( "表头节点\n" );
   print_element( target->data );
+  clear( target->data );
   destroy_list_node( &target );
   assert( !target );
   printf( "\n" );
@@ -173,6 +174,7 @@ int main( void )
   remove_list_tail( &list, &target );
   printf( "表尾节点\n" );
   print_element( target->data );
+  clear( target->data );
   destroy_list_node( &target );
   assert( !target );
   printf( "\n" );
@@ -182,6 +184,7 @@ int main( void )
   printf( "删除表中节点\n" );
   print_element( target->data );
   printf( "\n" );
+  clear( target->data );
   delete_list_node( &list, &target );
   print( &list );
   destroy_list_node( &target );
@@ -220,5 +223,9 @@ int main( void )
   set_list_node_content( target, third );
   print( &list );
 
+  clear( third );
+
+  clear_list( &list, clear );
+  
   return 0;
 }
