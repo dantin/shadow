@@ -45,7 +45,6 @@ Status clear_list( CircularLinkedList *list, Status ( *clear )( void * ) )
   p = get_list_head( list );
   while( list->size > 0 ) {
     t = p->next;
-    list->head = p;
 
     if( clear ) {
       status = clear( p->data );
@@ -57,6 +56,8 @@ Status clear_list( CircularLinkedList *list, Status ( *clear )( void * ) )
     destroy_list_node( &p );
     list->size--;
     p = t;
+    list->head = p;
+    list->tail->next = p;
   }
 
   if( status ) {
@@ -81,12 +82,13 @@ long list_size( CircularLinkedList *list )
 Status locate_list_node_by_position( CircularLinkedList *list, long index, CircularLinkedListNode **node )
 {
   CircularLinkedListNode *p;
+  long i;
 
-  for( p = get_list_head( list ); p->next != get_list_head( list ) && index > 0; p = p->next ) {
+  for( p = get_list_head( list ), i = 0; i < list_size( list ) && index > 0; p = p->next, i++ ) {
     index--;
   }
 
-  if( p && 0 == index ) {
+  if( i < list_size( list ) && 0 == index ) {
     *node = p;
     return true;
   } else {
@@ -98,28 +100,34 @@ Status locate_list_node_by_position( CircularLinkedList *list, long index, Circu
 CircularLinkedListNode *locate_list_node_by_locator( CircularLinkedList *list, void *key, int (*compare)(const void *, const void *) )
 {
   CircularLinkedListNode *p;
+  long i;
 
-  for( p = get_list_head( list ); p->next != get_list_head( list ); p = p->next ) {
+  for( p = get_list_head( list ), i = 0; i < list_size( list ); p = p->next, i++ ) {
     if( compare && !compare( p->data, key ) ) {
       break;
     }
   }
 
-  return p;
+  if( i < list_size( list ) ) {
+    return p;
+  } else {
+    return NULL;
+  }
 }
 
 CircularLinkedListNode *get_previous_node( CircularLinkedList *list, CircularLinkedListNode *pos )
 {
   CircularLinkedListNode *p, *c;
+  long i;
 
-  for( p = NULL, c = get_list_head( list ); c->next != get_list_head( list ); c = c->next ) {
+  for( p = NULL, c = get_list_head( list ), i = 0; i < list_size( list ); c = c->next, i++ ) {
     if( c == pos ) {
       break;
     }
     p = c;
   }
 
-  if( c && c == pos ) {
+  if( i < list_size( list ) && c == pos ) {
     return p;
   } else {
     return NULL;
@@ -129,14 +137,15 @@ CircularLinkedListNode *get_previous_node( CircularLinkedList *list, CircularLin
 CircularLinkedListNode *get_next_node( CircularLinkedList *list, CircularLinkedListNode *pos )
 {
   CircularLinkedListNode *p;
+  long i;
 
-  for( p = get_list_head( list ); p->next != get_list_head( list ); p = p->next) {
+  for( p = get_list_head( list ), i = 0; i < list_size( list ); p = p->next, i++) {
     if( p == pos ) {
       break;
     }
   }
 
-  if( p && p == pos ) {
+  if( i < list_size( list ) && p == pos ) {
     return p->next;
   } else {
     return NULL;
@@ -150,7 +159,7 @@ Status insert_list_head( CircularLinkedList *list, CircularLinkedListNode *node 
   }
 
   // 当前线性表为空
-  if( list->head == NULL ) {
+  if( is_empty_list( list ) ) {
     list->head = node;
     list->tail = node;
     node->next = node;
@@ -170,14 +179,14 @@ Status append_list_tail( CircularLinkedList *list, CircularLinkedListNode *node 
     return false;
   }
 
-  if( list->head == NULL ) {
+  if( is_empty_list( list ) ) {
     list->head = node;
     list->tail = node;
     node->next = node;
   } else {
+    node->next = list->head;
     list->tail->next = node;
     list->tail = node;
-    node->next = list->head;
   }
   list->size++;
 
@@ -319,9 +328,10 @@ void *get_list_node_content( CircularLinkedListNode *pos )
 Status list_traverse( CircularLinkedList *list, Status (*handle)(void *) )
 {
   CircularLinkedListNode *p;
+  long i;
   Status status = true;
 
-  for( p = get_list_head( list ); p->next != get_list_head( list ); p = p->next ) {
+  for( p = get_list_head( list ), i = 0; i <  list_size( list ); p = p->next, i++ ) {
     if( handle ) {
       status = handle( p->data );
     }
