@@ -74,7 +74,7 @@ int main( void )
   CircularLinkedListNode *p, *t;
   int count, inc;
 
-  count = 1;
+  count = 0;
   inc = 0;
   p = get_list_head( &list );
   while( true ) {
