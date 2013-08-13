@@ -98,6 +98,7 @@ int main( void )
       destroy_list_node( &min );
       printf( "\n" );
     }
+    print( &list );
   }
 
   clear_list( &list, clear );
