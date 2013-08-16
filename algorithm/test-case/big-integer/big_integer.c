@@ -41,24 +41,36 @@ BigInteger *read_big_integer( void )
 {
   int c;
   BigInteger *big_integer;
-  
+  BigIntegerElement *node;
+
   big_integer = ( BigInteger * ) malloc( sizeof( BigInteger ) );
   assert( big_integer );
   init_list( big_integer );
-  while( ( c = getchar() ) != EOF ) {
+
+  // handle heading '-' or '+'
+  c = getchar();
+  if( c == '-' || c == '+' ) {
+    char *digit = ( char * ) malloc( sizeof( char ) );
+    *digit = c;
+    if( make_list_node( &node, digit ) ) {
+      append_list_tail( big_integer, node );
+    }
+  }
+
+  while( c != EOF ) {
     if( !isdigit( c ) ) {
       break;
     }
 
     char *digit = ( char * ) malloc( sizeof( char ) );
     *digit = c;
-    BigIntegerElement *node;
     if( make_list_node( &node, digit ) ) {
       append_list_tail( big_integer, node );
     }
+    c = getchar();
   }
 
-  if( !is_empty_list( big_integer ) ) {
+  if( !is_empty_list( big_integer ) && !( list_size( big_integer ) == 1 && ( *( ( char * ) get_list_node_content( get_list_head( big_integer ) ) ) == '-' || *( ( char * ) get_list_node_content( get_list_head( big_integer ) ) ) == '+' ) ) ) {
     return big_integer;
   } else {
     free( big_integer );
@@ -69,23 +81,27 @@ BigInteger *read_big_integer( void )
 BigInteger *init_big_integer( int value )
 {
   BigInteger *big_integer;
-  int sign = 1;
-
-  if( value < 0 ) {
-    sign = -1;
-    value = -value;
-  }
+  BigIntegerElement *node;
 
   big_integer = ( BigInteger * ) malloc( sizeof( BigInteger ) );
   assert( big_integer );
 
   init_list( big_integer );
 
+  if( value < 0 ) {
+    char *digit = ( char * ) malloc( sizeof( char ) );
+    *digit = '-';
+    if( make_list_node( &node, digit ) ) {
+      append_list_tail( big_integer, node );
+    }
+
+    value = -value;
+  }
+
   do {
     char *digit = ( char * ) malloc( sizeof( char ) );
     *digit = value % 10 + '0';
 
-    BigIntegerElement *node;
     if( make_list_node( &node, digit ) ) {
       append_list_tail( big_integer, node );
     }
