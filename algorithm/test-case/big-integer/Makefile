@@ -1,8 +1,11 @@
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
 
-big_integer: doubly_linked_list.o main.o
-	$(CC) $(CFLAGS) -o big_integer doubly_linked_list.o main.o
+demo: big_integer.o main.o doubly_linked_list.o
+	$(CC) $(CFLAGS) -o demo big_integer.o main.o doubly_linked_list.o
+
+big_integer.o: init big_integer.h big_integer.c
+	$(CC) $(CFLAGS) -c big_integer.c
 
 doubly_linked_list.o: init doubly_linked_list.h doubly_linked_list.c
 	$(CC) $(CFLAGS) -c doubly_linked_list.c
@@ -15,7 +18,7 @@ init:
 	cp ../../data-structure/doubly_linked_list.c .
 
 clean:
-	rm -f doubly_linked_list.h doubly_linked_list.c main.o doubly_linked_list.o big_integer
+	rm -f doubly_linked_list.h doubly_linked_list.c main.o doubly_linked_list.o big_integer.o demo
 
 test:
-	./big_integer < data/input
+	./demo < data/input
