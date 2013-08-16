@@ -243,3 +243,31 @@ BigInteger *multiply( BigInteger *number1, BigInteger *number2 )
     return NULL;
   }
 }
+
+BigInteger *absolute( BigInteger *number )
+{
+  BigInteger *abs;
+  BigIntegerElement *p, *node;
+  char c;
+
+  abs = ( BigInteger * ) malloc( sizeof( BigInteger ) );
+  assert( abs );
+  init_list( abs );
+
+  for( p = get_list_head( number ); p; p = p->next ) {
+    if( isdigit( c = *( ( char * ) get_list_node_content( p ) ) ) ) {
+      char *digit = ( char * ) malloc( sizeof( char ) );
+      *digit = c;
+      if( make_list_node( &node, digit ) ) {
+	append_list_tail( abs, node );
+      }
+    }
+  }
+
+  if( !is_empty_list( abs ) ) {
+    return abs;
+  } else {
+    destroy_big_integer( &abs );
+    return NULL;
+  }
+}

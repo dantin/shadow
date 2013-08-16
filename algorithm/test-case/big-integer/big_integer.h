@@ -37,4 +37,9 @@ BigInteger *add( BigInteger *number1, BigInteger *number2 );
  */
 BigInteger *multiply( BigInteger *number1, BigInteger *number2 );
 
+/*
+ * 大数绝对值
+ */
+BigInteger *absolute( BigInteger *number );
+
 #endif
