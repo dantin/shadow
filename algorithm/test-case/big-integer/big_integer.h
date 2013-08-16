@@ -23,8 +23,18 @@ BigInteger *read_big_integer( void );
 void destroy_big_integer( BigInteger **big_integer );
 
 /*
+ * 初始化一个大数
+ */
+BigInteger *init_big_integer( int value );
+
+/*
  * 大数相加
  */
 BigInteger *add( BigInteger *number1, BigInteger *number2 );
+
+/*
+ * 大数相乘
+ */
+BigInteger *multiply( BigInteger *number1, BigInteger *number2 );
 
 #endif
