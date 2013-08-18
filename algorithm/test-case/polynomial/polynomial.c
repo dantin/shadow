@@ -37,6 +37,20 @@ void print_polynomial( Polynomial *polynomial )
   printf( "\n" );
 }
 
+static int compare( const void *src, const void *target )
+{
+  PolynomialTerm *s = ( PolynomialTerm * ) src;
+  PolynomialTerm *t = ( PolynomialTerm * ) target;
+
+  if( s->expn < t->expn ) {
+    return -1;
+  } else if( s->expn == t->expn ) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
 Polynomial *create_polynomial( int size )
 {
   Polynomial *polynomial;
@@ -74,4 +88,9 @@ void destroy_polynomial( Polynomial **polynomial )
   clear_list( *polynomial, clear_polynomial_element );
   free( *polynomial );
   *polynomial = NULL;
+}
+
+long polynomial_size( Polynomial *polynomial )
+{
+  return list_size( polynomial );
 }

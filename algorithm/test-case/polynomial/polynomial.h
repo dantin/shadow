@@ -18,6 +18,10 @@ typedef struct {
 void print_polynomial( Polynomial *polynomial );
 
 /*
+ */
+Status locate_polynomial_element( Polynomial *polynomial, PolynomialTerm e, PolynomialElement *p, int ( * compare )( const void *src, const void * target) );
+
+/*
  * 读取一个多项式
  */
 Polynomial *create_polynomial( int size );
@@ -26,5 +30,10 @@ Polynomial *create_polynomial( int size );
  * 销毁一个多项式
  */
 void destroy_polynomial( Polynomial **polynomial );
+
+/*
+ * 返回多项式项数
+ */
+long polynomial_size( Polynomial *polynomial );
 
 #endif
