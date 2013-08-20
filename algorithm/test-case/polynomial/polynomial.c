@@ -37,7 +37,7 @@ void print_polynomial( Polynomial *polynomial )
   printf( "\n" );
 }
 
-static int compare( const void *src, const void *target )
+int compare( const void *src, const void *target )
 {
   PolynomialTerm *s = ( PolynomialTerm * ) src;
   PolynomialTerm *t = ( PolynomialTerm * ) target;
@@ -48,6 +48,26 @@ static int compare( const void *src, const void *target )
     return 0;
   } else {
     return 1;
+  }
+}
+
+Status locate_polynomial_element( Polynomial *polynomial, PolynomialTerm *e, PolynomialElement **node, int ( * compare )( const void *src, const void * target) )
+{
+  PolynomialElement *p;
+
+  for( p = get_list_head( polynomial ); p; p = p->next ) {
+    if( compare( p->data, e ) == 0 ) {
+      break;
+    } else if( compare( p->data, e ) == 1 ) {
+      break;
+    }
+  }
+
+  *node = p;
+  if( p ) {
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -64,14 +84,25 @@ Polynomial *create_polynomial( int size )
   for( i = 0; i < size; i++ ) {
     float coef;
     int expn;
+    PolynomialElement *p;
 
     scanf( "%f %d", &coef, &expn );
     PolynomialTerm *term = ( PolynomialTerm * ) malloc( sizeof( PolynomialTerm ) );
     term->coef = coef;
     term->expn = expn;
-
-    if( make_list_node( &node, term ) ) {
-      append_list_tail( polynomial, node );
+    
+    if( !locate_polynomial_element( polynomial, term, &p, compare ) ) {
+      if( make_list_node( &node, term ) ) {
+	if( p ) {
+	  insert_before_list_node( polynomial, &p, node );
+	} else {
+	  append_list_tail( polynomial, node );
+	}
+      }
+    } else {
+      PolynomialTerm *target = ( PolynomialTerm * ) p->data;
+      target->coef += term->coef;
+      free( term );
     }
   }
 
