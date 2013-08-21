@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "polynomial.h"
 
@@ -54,9 +55,11 @@ int compare( const void *src, const void *target )
 Status locate_polynomial_element( Polynomial *polynomial, PolynomialTerm *e, PolynomialElement **node, int ( * compare )( const void *src, const void * target) )
 {
   PolynomialElement *p;
+  bool found = false;
 
   for( p = get_list_head( polynomial ); p; p = p->next ) {
     if( compare( p->data, e ) == 0 ) {
+      found = true;
       break;
     } else if( compare( p->data, e ) == 1 ) {
       break;
@@ -64,7 +67,7 @@ Status locate_polynomial_element( Polynomial *polynomial, PolynomialTerm *e, Pol
   }
 
   *node = p;
-  if( p ) {
+  if( found ) {
     return true;
   } else {
     return false;
