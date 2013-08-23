@@ -44,8 +44,13 @@ long polynomial_size( Polynomial *polynomial );
 int compare( const void *src, const void *target );
 
 /*
- *多项式加法
+ * 多项式加法
  */
 Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb );
+
+/*
+ * 多项式乘法
+ */
+Polynomial *multiply_polynomial( Polynomial *pa, Polynomial *pb );
 
 #endif

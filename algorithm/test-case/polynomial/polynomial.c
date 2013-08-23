@@ -213,3 +213,64 @@ Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
     return NULL;
   }
 }
+
+static Polynomial *multiply_polynomial_element( Polynomial *p, PolynomialElement *element )
+{
+  Polynomial *multiply;
+  PolynomialElement *node, *q;
+  PolynomialTerm *term, *cur, *factor;
+
+  factor = ( PolynomialTerm * ) get_list_node_content( element );
+
+  multiply = ( Polynomial * ) malloc( sizeof( Polynomial ) );
+  assert( multiply );
+  init_list( multiply );
+
+  for( q = get_list_head( p ); q; q = q->next ) {
+    cur = ( PolynomialTerm * ) get_list_node_content( q );
+
+    term = ( PolynomialTerm * ) malloc( sizeof( PolynomialTerm ) );
+    assert( term );
+    term->expn = cur->expn + factor->expn;
+    term->coef = cur->coef * factor->coef;
+    if( make_list_node( &node, term ) ) {
+      append_list_tail( multiply, node );
+    }
+  }
+
+  if( !is_empty_list( multiply ) ) {
+    return multiply;
+  } else {
+    free( multiply );
+    return NULL;
+  }
+}
+
+Polynomial *multiply_polynomial( Polynomial *pa, Polynomial *pb )
+{
+  Polynomial *sum, *temp;
+  PolynomialElement *p;
+
+  sum = ( Polynomial * ) malloc( sizeof( Polynomial ) );
+  assert( sum );
+  init_list( sum );
+
+  for( p = get_list_head( pa ); p; p = p->next ) {
+    Polynomial *multiply = multiply_polynomial_element( pb, p );
+    if( is_empty_list( sum ) ) {
+      sum = multiply;
+    } else {
+      temp = sum;
+      sum = add_polynomial( temp, multiply );
+      destroy_polynomial( &temp );
+      destroy_polynomial( &multiply );
+    } 
+  }
+
+  if( !is_empty_list( sum ) ) {
+    return sum;
+  } else {
+    free( sum );
+    return NULL;
+  }
+}
