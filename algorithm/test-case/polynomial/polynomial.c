@@ -119,6 +119,10 @@ Polynomial *create_polynomial( int size )
 
 void destroy_polynomial( Polynomial **polynomial )
 {
+  if( !( *polynomial ) ) {
+    return;
+  }
+
   clear_list( *polynomial, clear_polynomial_element );
   free( *polynomial );
   *polynomial = NULL;
@@ -127,4 +131,85 @@ void destroy_polynomial( Polynomial **polynomial )
 long polynomial_size( Polynomial *polynomial )
 {
   return list_size( polynomial );
+}
+
+Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
+{
+  Polynomial *polynomial;
+  PolynomialElement *node, *p, *q;
+  PolynomialTerm *ta, *tb, *term;
+
+  polynomial = ( Polynomial * ) malloc( sizeof( Polynomial ) );
+  assert( polynomial );
+  init_list( polynomial );
+
+  for( p = get_list_head( pa ), q = get_list_head( pb ); p && q; ) {
+    ta = ( PolynomialTerm * ) get_list_node_content( p );
+    tb = ( PolynomialTerm * ) get_list_node_content( q );
+
+    term = ( PolynomialTerm * ) malloc( sizeof( PolynomialTerm ) );
+    assert( term );
+    if( ta->expn < tb->expn ) {
+      term->expn = ta->expn;
+      term->coef = ta->coef;
+      if( make_list_node( &node, term ) ) {
+	append_list_tail( polynomial, node );
+      }
+      p = p->next;
+    } else if( ta->expn == tb->expn ) {
+      term->expn = ta->expn;
+      term->coef = ta->coef + tb->coef;
+      if( term->coef - 0 > 0.00001F ) {
+	if( make_list_node( &node, term ) ) {
+	  append_list_tail( polynomial, node );
+	}
+      } else {
+	free( term );
+      }
+      p = p->next;
+      q = q->next;
+    } else {
+      term->expn = tb->expn;
+      term->coef = tb->coef;
+      if( make_list_node( &node, term ) ) {
+	append_list_tail( polynomial, node );
+      }
+      q = q->next;
+    }
+  }
+
+  while( p ) {
+    ta = ( PolynomialTerm * ) get_list_node_content( p );
+
+    term = ( PolynomialTerm * ) malloc( sizeof( PolynomialTerm ) );
+    assert( term );
+    term->expn = ta->expn;
+    term->coef = ta->coef;
+    if( make_list_node( &node, term ) ) {
+      append_list_tail( polynomial, node );
+    }
+
+    p = p->next;
+  }
+
+  while( q ) {
+    tb = ( PolynomialTerm * ) get_list_node_content( q );
+
+    term = ( PolynomialTerm * ) malloc( sizeof( PolynomialTerm ) );
+    assert( term );
+    term->expn = tb->expn;
+    term->coef = tb->coef;
+    if( make_list_node( &node, term ) ) {
+      append_list_tail( polynomial, node );
+    }
+
+    q = q->next;
+  }
+
+  if( !is_empty_list( polynomial ) ) {
+    return polynomial;
+  } else {
+    free( polynomial );
+    return NULL;
+  }
 }
