@@ -18,20 +18,27 @@ static Status clear_polynomial_element( void *element )
   }
 }
 
-static Status print_polynomial_element( void *data ) {
-  if( data == NULL ) {
-    return false;
-  }
-
-  PolynomialTerm *term = ( PolynomialTerm * ) data;
-  printf( " %c %fx^%d", term->coef >= 0 ? '+' : '-', term->coef, term->expn);
-  return true;
-}
-
 void print_polynomial( Polynomial *polynomial )
 {
+  PolynomialElement *p;
+  int i;
+
   if( !is_empty_list( polynomial ) ) {
-    list_traverse( polynomial, print_polynomial_element );
+    for( p = get_list_tail( polynomial ), i = 0; p; p = p->previous, i++ ) {
+      PolynomialTerm *term = ( PolynomialTerm * ) get_list_node_content( p );
+      if( i > 0 ) {
+	printf( " %c ", term->coef >= 0 ? '+' : '-' );
+      } else if( i == 0 && term->coef < 0 ) {
+	printf( "-" );
+      }
+
+      printf( "%.2f", ( term->coef >= 0 ) ? term->coef : -( term->coef ) );
+      if( term->expn > 1 ) {
+	printf( "X^%d", term->expn );
+      } else if( term->expn == 1 ) {
+	printf( "X" );
+      }
+    }
   } else {
     printf( "NAN" );
   }
