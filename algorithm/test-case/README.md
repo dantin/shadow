@@ -33,6 +33,10 @@ array list的数据结构及测试
 
 单链的删除
 
+## polynomial
+
+多项式运算
+
 ## singly-linked-list
 
 单链的数据结构及测试
