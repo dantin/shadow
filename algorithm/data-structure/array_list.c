@@ -42,7 +42,7 @@ Status clear_list( ArrayList *list, void ( *clear )( void * ) )
   Status status = true;
   ArrayListNode *p, *t;
 
-  for( p = list->elements + list->size - 1; p >= list->elements; p-- ) {
+  for( p = list->elements + list_size( list ) - 1; p >= list->elements; p-- ) {
     t = p - 1;
     if( clear ) {
       status = clear( p->data );
@@ -76,7 +76,7 @@ long list_size( ArrayList *list )
 Status locate_list_node_by_position( ArrayList *list, long index, ArrayListNode **node )
 {
   if( index >= 0 && index < list_size( list ) ) {
-    *node = list->elements + i ;
+    *node = list->elements + i;
     return true;
   } else {
     *node = NULL;
@@ -118,37 +118,121 @@ ArrayListNode *get_next_node( ArrayList *list, ArrayListNode *pos )
   }
 }
 
-
-void list_insert( ArrayList *list, void *data, long index )
+Status insert_list_head( ArrayList *list, ArrayListNode *node )
 {
-  if( index < 0 || index > list_size( list ) ) {
-    return;
+  ArrayListNode *p;
+
+  if( node == NULL ) {
+    return false;
   }
 
-  if( list_size( list ) >= list->limit ) {
+  if( list_size( list ) == list->limit ) {
     ArrayListNode *base = ( ArrayListNode * ) realloc( list->elements, ( list_size( list ) + ARRAY_LIST_INCREMENT ) * sizeof( ArrayListNode ) );
     assert( base );
     list->elements = base;
     list->limit += ARRAY_LIST_INCREMENT;
   }
 
-  ArrayListNode *location = list->elements + index;
-  for( ArrayListNode *p = list->elements + list_size( list ) - 1; p >= location; p-- ) {
-    *( p + 1 ) = *p;
+  for( p = list->elements + list_size( list ); p > list->elements; p-- ) {
+    *p = *( p - 1 );
   }
-  location->data = data;
-  ++list->size;
+
+  p->data = node->data;
+  list->size++;
+
+  return true;
 }
 
-/*
- * 删除一个节点
- *
- *   返回删除节点数据
- *   若未找到待删除节点，返回空
- *
- * list   目标线性表指针
- * index  待删除节点下标，定义域为[0, list_size( list ) - 1]
- */
+Status append_list_tail( ArrayList *list, ArrayListNode *node )
+{
+  ArrayListNode *p;
+
+  if( node == NULL ) {
+    return false;
+  }
+
+  if( list_size( list ) == list->limit ) {
+    ArrayListNode *base = ( ArrayListNode * ) realloc( list->elements, ( list_size( list ) + ARRAY_LIST_INCREMENT ) * sizeof( ArrayListNode ) );
+    assert( base );
+    list->elements = base;
+    list->limit += ARRAY_LIST_INCREMENT;
+  }
+
+  p = list->elements + list_size( list );
+  p->data = node->data;
+  list->size++;
+
+  return true;
+}
+
+Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode *node)
+{
+  ArrayListNode *p;
+
+  if( node == NULL ) {
+    return false;
+  }
+
+  if( list_size( list ) == list->limit ) {
+    ArrayListNode *base = ( ArrayListNode * ) realloc( list->elements, ( list_size( list ) + ARRAY_LIST_INCREMENT ) * sizeof( ArrayListNode ) );
+    assert( base );
+    list->elements = base;
+    list->limit += ARRAY_LIST_INCREMENT;
+  }
+
+  if( *pos == get_list_head( list ) ) {
+   return insert_list_head( list, node );
+  } else if( *pos > get_list_head( list ) && *pos < get_list_head( list ) + list_size( list ) ) {
+    for( p = list->elements + list_size( list ); p > *pos; p-- ) {
+      *p = *( p - 1 );
+    }
+    p->data = node->data;
+    list->size++;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode *node )
+{
+  ArrayListNode *p;
+
+  if( node == NULL ) {
+    return false;
+  }
+
+  if( list_size( list ) == list->limit ) {
+    ArrayListNode *base = ( ArrayListNode * ) realloc( list->elements, ( list_size( list ) + ARRAY_LIST_INCREMENT ) * sizeof( ArrayListNode ) );
+    assert( base );
+    list->elements = base;
+    list->limit += ARRAY_LIST_INCREMENT;
+  }
+
+  if( *pos == get_list_tail( list ) ) {
+    return append_list_tail( list, node );
+  } else if( *pos >= list->elements && *pos < list->elements + list_size( list ) - 1 ) {
+    for( p = list->elements + list_size( list ); p > *pos; p-- ) {
+      *p = *( p - 1 );
+    }
+    p->data = node->data;
+    list->size++;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Status delete_list_head( ArrayList *list, ArrayListNode **node)
+{
+  if( is_empty_list( list ) || node == NULL ) {
+    return false;
+  }
+
+  make_list_node( node, list->elements->data );
+
+}
+
 void *list_delete( ArrayList *list, long index )
 {
   if( index < 0 || index > list_size( list ) ) {
