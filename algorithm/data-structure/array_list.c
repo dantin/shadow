@@ -37,7 +37,7 @@ Status init_list( ArrayList *list )
   return true;
 }
 
-Status clear_list( ArrayList *list, void ( *clear )( void * ) )
+Status clear_list( ArrayList *list, Status ( *clear )( void * ) )
 {
   Status status = true;
   ArrayListNode *p, *t;
@@ -76,7 +76,7 @@ long list_size( ArrayList *list )
 Status locate_list_node_by_position( ArrayList *list, long index, ArrayListNode **node )
 {
   if( index >= 0 && index < list_size( list ) ) {
-    *node = list->elements + i;
+    *node = list->elements + index;
     return true;
   } else {
     *node = NULL;
@@ -102,7 +102,7 @@ ArrayListNode *locate_list_node_by_locator( ArrayList *list, void *key, int (*co
 
 ArrayListNode *get_previous_node( ArrayList *list, ArrayListNode *pos )
 {
-  if( pos >= 1 && pos < list->elements + list_size( list ) ) {
+  if( pos >= list->elements + 1 && pos < list->elements + list_size( list ) ) {
     return --pos;
   } else {
     return NULL;
@@ -111,7 +111,7 @@ ArrayListNode *get_previous_node( ArrayList *list, ArrayListNode *pos )
 
 ArrayListNode *get_next_node( ArrayList *list, ArrayListNode *pos )
 {
-  if( pos >= 0 && pos <= list->element + list_size( list ) - 1 ) {
+  if( pos >= list->elements && pos <= list->elements + list_size( list ) - 1 ) {
     return ++pos;
   } else {
     return NULL;
@@ -223,45 +223,94 @@ Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNo
   }
 }
 
-Status delete_list_head( ArrayList *list, ArrayListNode **node)
+Status delete_list_head( ArrayList *list, ArrayListNode **node )
 {
+  ArrayListNode *p;
+
   if( is_empty_list( list ) || node == NULL ) {
     return false;
   }
 
   make_list_node( node, list->elements->data );
-
-}
-
-void *list_delete( ArrayList *list, long index )
-{
-  if( index < 0 || index > list_size( list ) ) {
-    return NULL;
-  }
-
-  ArrayListNode *p;
-  void *result;
-  p = list->elements + index;
-  result = p->data;
-  for( p++; p < list->elements + list_size( list ); p++ ) {
-    *( p - 1 ) = *p;
+  for( p = list->elements; p < list->elements + list_size( list ) - 1; p++ ) {
+    *p = *( p + 1 );
   }
   list->size--;
 
-  return result;
+  return true;
 }
 
-/*
- * 链表遍历
- *
- * list    目标线性表指针
- * handle  函数句柄，对线性表中的每一个元素做相应的操作
- */
-void list_traverse( ArrayList *list, void (*handle)(void *) )
+Status remove_list_tail( ArrayList *list, ArrayListNode **node )
 {
-  for( ArrayListNode *p = list->elements; p < list->elements + list_size( list ); p++ ) {
+  if( is_empty_list( list ) || node == NULL ) {
+    return false;
+  }
+
+  make_list_node( node, ( list->elements + list_size( list ) - 1 )->data );
+  return true;
+}
+
+Status delete_list_node( ArrayList *list, ArrayListNode **pos )
+{
+  ArrayListNode *p;
+
+  if( is_empty_list( list ) || pos == NULL || *pos == NULL ) {
+    return false;
+  }
+
+  if( *pos == get_list_head( list ) ) {
+    return delete_list_head( list, pos );
+  } else if( *pos == get_list_tail( list ) ) {
+    return remove_list_tail( list, pos );
+  } else if( *pos >= list->elements && *pos < list->elements + list_size( list ) ) {
+    for( p = *pos; p < list->elements + list_size( list ) - 1; p++ ) {
+      *p = *( p + 1 );
+    }
+    list->size--;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+ArrayListNode *get_list_head( ArrayList *list )
+{
+  return list->elements;
+}
+
+ArrayListNode *get_list_tail( ArrayList *list )
+{
+  return list->elements + list_size( list ) - 1;
+}
+
+Status set_list_node_content( ArrayListNode *pos, void *data )
+{
+  if( pos == NULL || data == NULL ) {
+    return false;
+  }
+
+  pos->data = data;
+  return true;
+}
+
+void *get_list_node_content( ArrayListNode *pos )
+{
+  return pos ? pos->data : NULL;
+}
+
+Status list_traverse( ArrayList *list, Status (*handle)(void *) )
+{
+  ArrayListNode *p;
+  Status status = true;
+
+  for( p = list->elements; p < list->elements + list_size( list ); p++ ) {
     if( handle ) {
-      handle( p->data );
+      status = handle( p->data );
+    }
+    if( !status ) {
+      break;
     }
   }
+
+  return status;
 }
