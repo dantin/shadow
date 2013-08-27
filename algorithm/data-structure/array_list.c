@@ -51,7 +51,6 @@ Status clear_list( ArrayList *list, Status ( *clear )( void * ) )
     if( !status ) {
       break;
     }
-    destroy_list_node( &p );
     list->size--;
     p = t;
   }
@@ -247,12 +246,14 @@ Status remove_list_tail( ArrayList *list, ArrayListNode **node )
   }
 
   make_list_node( node, ( list->elements + list_size( list ) - 1 )->data );
+  list->size--;
+
   return true;
 }
 
 Status delete_list_node( ArrayList *list, ArrayListNode **pos )
 {
-  ArrayListNode *p;
+  ArrayListNode *p, *target;
 
   if( is_empty_list( list ) || pos == NULL || *pos == NULL ) {
     return false;
@@ -263,7 +264,9 @@ Status delete_list_node( ArrayList *list, ArrayListNode **pos )
   } else if( *pos == get_list_tail( list ) ) {
     return remove_list_tail( list, pos );
   } else if( *pos >= list->elements && *pos < list->elements + list_size( list ) ) {
-    for( p = *pos; p < list->elements + list_size( list ) - 1; p++ ) {
+    target = *pos;
+    make_list_node( pos, ( *pos )->data );
+    for( p = target; p < list->elements + list_size( list ) - 1; p++ ) {
       *p = *( p + 1 );
     }
     list->size--;
