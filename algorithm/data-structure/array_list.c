@@ -40,10 +40,9 @@ Status init_list( ArrayList *list )
 Status clear_list( ArrayList *list, Status ( *clear )( void * ) )
 {
   Status status = true;
-  ArrayListNode *p, *t;
+  ArrayListNode *p;
 
   for( p = list->elements + list_size( list ) - 1; p >= list->elements; p-- ) {
-    t = p - 1;
     if( clear ) {
       status = clear( p->data );
     }
@@ -52,7 +51,6 @@ Status clear_list( ArrayList *list, Status ( *clear )( void * ) )
       break;
     }
     list->size--;
-    p = t;
   }
 
   if( status ) {
@@ -85,10 +83,12 @@ Status locate_list_node_by_position( ArrayList *list, long index, ArrayListNode 
 
 ArrayListNode *locate_list_node_by_locator( ArrayList *list, void *key, int (*compare)(const void *, const void *) )
 {
-  ArrayListNode *p;
-  for( p = list->elements; p < list->elements + list_size( list ); p++ ) {
-    if( compare && !compare( p->data, key ) ) {
-      break;
+  ArrayListNode *p = NULL;
+  if( !is_empty_list( list ) ) {
+    for( p = list->elements; p < list->elements + list_size( list ); p++ ) {
+      if( compare && !compare( p->data, key ) ) {
+	break;
+      }
     }
   }
 

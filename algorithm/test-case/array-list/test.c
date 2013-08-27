@@ -62,7 +62,7 @@ int main( void )
   printf( "初始化线性表\n" );
   init_list( &list );
   print( &list );
-
+  
   printf( "在表头增加新节点\n" );
   for( int i = 0; i < 10; i++ ) {
     Element *element = ( Element * ) malloc( sizeof( Element ) );
@@ -78,7 +78,7 @@ int main( void )
   printf( "清理线性表\n" );
   clear_list( &list, clear );
   print( &list );
-
+  
   printf( "%s线性表长度 %ld\n", is_empty_list( &list ) ? "空" : "非空", list_size( &list ) );
 
   printf( "在表尾增加新节点\n" );
@@ -94,18 +94,18 @@ int main( void )
   print( &list );
 
   printf( "%s线性表长度 %ld\n", is_empty_list( &list ) ? "空" : "非空", list_size( &list ) );
-
+  
   ArrayListNode *target;
   if( locate_list_node_by_position( &list, 2, &target ) ) {
     printf( "找到下标为%d的节点：", 2 );
     print_element( target->data );
     printf( "\n" );
   }
-
+  
   if( !locate_list_node_by_position( &list, 10, &target ) ) {
     printf( "找不到下标为%d的节点\n", 10 );
   }
-
+  
   Element *targetElement = ( Element * )malloc( sizeof( Element ) );
   targetElement->intVal = 3;
   target = locate_list_node_by_locator( &list, targetElement, equal );
@@ -201,6 +201,7 @@ int main( void )
   locate_list_node_by_position( &list, 2, &target );
   insert_before_list_node( &list, &target, node );
   print( &list );
+  destroy_list_node( &node );
 
   Element *another = ( Element * ) malloc( sizeof( Element ) );
   another->intVal = 30;
@@ -212,6 +213,7 @@ int main( void )
   locate_list_node_by_position( &list, 2, &target );
   append_after_list_node( &list, &target, node );
   print( &list );
+  destroy_list_node( &node );
 
   printf( "获取位置为%d的节点内容\n", 2 );
   print_element( target->data );
@@ -226,8 +228,10 @@ int main( void )
   print( &list );
 
   third = NULL;
-
+  
   clear_list( &list, clear );
   
+  free( list.elements );
+    
   return 0;
 }
