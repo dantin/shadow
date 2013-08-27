@@ -211,7 +211,7 @@ Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNo
   if( *pos == get_list_tail( list ) ) {
     return append_list_tail( list, node );
   } else if( *pos >= list->elements && *pos < list->elements + list_size( list ) - 1 ) {
-    for( p = list->elements + list_size( list ); p > *pos; p-- ) {
+    for( p = list->elements + list_size( list ); p > *pos + 1; p-- ) {
       *p = *( p - 1 );
     }
     p->data = node->data;
