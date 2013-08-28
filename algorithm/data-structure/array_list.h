@@ -143,7 +143,7 @@ Status append_list_tail( ArrayList *list, ArrayListNode **node );
  * 将节点插入顺序线性表中某一位置之前，插入成功后，node为空
  *
  * list    目标线性表指针
- * data    目标插入位置指针
+ * pos     目标插入位置指针
  * node    目标节点指针地址
  */
 Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode **node );
