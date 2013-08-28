@@ -157,6 +157,7 @@ Status insert_list_head( ArrayList *list, ArrayListNode **node )
   p->data = ( *node )->data;
   list->size++;
   destroy_list_node( node );
+  *node = p;
 
   return true;
 }
@@ -180,6 +181,7 @@ Status append_list_tail( ArrayList *list, ArrayListNode **node )
   p->data = ( *node )->data;
   list->size++;
   destroy_list_node( node );
+  *node = p;
 
   return true;
 }
@@ -208,6 +210,7 @@ Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListN
     p->data = ( *node )->data;
     list->size++;
     destroy_list_node( node );
+    *node = p;
 
     return true;
   } else {
@@ -239,6 +242,7 @@ Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNo
     p->data = ( *node )->data;
     list->size++;
     destroy_list_node( node );
+    *node = p;
 
     return true;
   } else {
