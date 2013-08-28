@@ -46,9 +46,16 @@ void destroy_list_node( ArrayListNode **node );
 /*
  * 构造一个空的顺序线性表
  *
- * list   目标线性表指针
+ * list   目标线性表指针地址
  */
-Status init_list( ArrayList *list );
+Status init_list( ArrayList **list );
+
+/*
+ * 释放一个空的顺序线性表
+ *
+ * list   目标线性表指针地址
+ */
+Status destroy_list( ArrayList **list );
 
 /*
  * 将顺序线性表重置为空表，并释放原链表节点空间
@@ -122,7 +129,7 @@ ArrayListNode * get_next_node( ArrayList *list, ArrayListNode *pos );
  * list      目标线性表指针
  * node      待插节点指针
  */
-Status insert_list_head( ArrayList *list, ArrayListNode *node );
+Status insert_list_head( ArrayList *list, ArrayListNode **node );
 
 /*
  * 将节点插入顺序线性表表尾
@@ -130,7 +137,7 @@ Status insert_list_head( ArrayList *list, ArrayListNode *node );
  * list      目标线性表指针
  * node      待插节点指针
  */
-Status append_list_tail( ArrayList *list, ArrayListNode *node );
+Status append_list_tail( ArrayList *list, ArrayListNode **node );
 
 /*
  * 将节点插入顺序线性表中某一位置之前
@@ -139,7 +146,7 @@ Status append_list_tail( ArrayList *list, ArrayListNode *node );
  * data    目标插入位置
  * index   目标节点
  */
-Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode *node );
+Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode **node );
 
 /*
  * 将节点插入顺序线性表中某一位置之后
@@ -148,7 +155,7 @@ Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListN
  * pos     目标插入位置
  * node    目标节点
  */
-Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode *node );
+Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode **node );
 
 /*
  * 删除顺序线性表表头节点，并以node返回

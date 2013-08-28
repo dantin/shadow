@@ -23,16 +23,34 @@ void destroy_list_node( ArrayListNode **node )
   *node = NULL;
 }
 
-Status init_list( ArrayList *list )
+Status init_list( ArrayList **listp )
 {
-  if( !list ) {
+  if( !listp || *listp ) {
     return false;
   }
 
+  ArrayList *list = ( ArrayList * ) malloc( sizeof( ArrayList ) );
+  assert( list );
+
+  *listp = list;
   list->elements = ( ArrayListNode * ) malloc( ARRAY_LIST_INIT_SIZE * sizeof( ArrayListNode ) );
   assert( list->elements );
   list->size = 0;
   list->limit = ARRAY_LIST_INIT_SIZE;
+
+  return true;
+}
+
+Status destroy_list( ArrayList **listp )
+{
+  if( !listp || !*listp ) {
+    return false;
+  }
+
+  free( ( *listp )->elements );
+  ( *listp )->elements = NULL;
+  free( *listp );
+  *listp = NULL;
 
   return true;
 }
@@ -110,18 +128,18 @@ ArrayListNode *get_previous_node( ArrayList *list, ArrayListNode *pos )
 
 ArrayListNode *get_next_node( ArrayList *list, ArrayListNode *pos )
 {
-  if( pos >= list->elements && pos <= list->elements + list_size( list ) - 1 ) {
+  if( pos >= list->elements && pos < list->elements + list_size( list ) - 1 ) {
     return ++pos;
   } else {
     return NULL;
   }
 }
 
-Status insert_list_head( ArrayList *list, ArrayListNode *node )
+Status insert_list_head( ArrayList *list, ArrayListNode **node )
 {
   ArrayListNode *p;
 
-  if( node == NULL ) {
+  if( node == NULL || *node == NULL ) {
     return false;
   }
 
@@ -136,17 +154,18 @@ Status insert_list_head( ArrayList *list, ArrayListNode *node )
     *p = *( p - 1 );
   }
 
-  p->data = node->data;
+  p->data = ( *node )->data;
   list->size++;
+  destroy_list_node( node );
 
   return true;
 }
 
-Status append_list_tail( ArrayList *list, ArrayListNode *node )
+Status append_list_tail( ArrayList *list, ArrayListNode **node )
 {
   ArrayListNode *p;
 
-  if( node == NULL ) {
+  if( node == NULL || *node == NULL ) {
     return false;
   }
 
@@ -158,17 +177,18 @@ Status append_list_tail( ArrayList *list, ArrayListNode *node )
   }
 
   p = list->elements + list_size( list );
-  p->data = node->data;
+  p->data = ( *node )->data;
   list->size++;
+  destroy_list_node( node );
 
   return true;
 }
 
-Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode *node)
+Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode **node)
 {
   ArrayListNode *p;
 
-  if( node == NULL ) {
+  if( node == NULL || *node == NULL ) {
     return false;
   }
 
@@ -185,19 +205,21 @@ Status insert_before_list_node( ArrayList *list, ArrayListNode **pos, ArrayListN
     for( p = list->elements + list_size( list ); p > *pos; p-- ) {
       *p = *( p - 1 );
     }
-    p->data = node->data;
+    p->data = ( *node )->data;
     list->size++;
+    destroy_list_node( node );
+
     return true;
   } else {
     return false;
   }
 }
 
-Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode *node )
+Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNode **node )
 {
   ArrayListNode *p;
 
-  if( node == NULL ) {
+  if( node == NULL || *node == NULL ) {
     return false;
   }
 
@@ -214,8 +236,10 @@ Status append_after_list_node( ArrayList *list, ArrayListNode **pos, ArrayListNo
     for( p = list->elements + list_size( list ); p > *pos + 1; p-- ) {
       *p = *( p - 1 );
     }
-    p->data = node->data;
+    p->data = ( *node )->data;
     list->size++;
+    destroy_list_node( node );
+
     return true;
   } else {
     return false;
