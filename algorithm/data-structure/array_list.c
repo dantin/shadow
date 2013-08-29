@@ -99,7 +99,7 @@ Status locate_list_node_by_position( ArrayList *list, long index, ArrayListNode 
   }
 }
 
-ArrayListNode *locate_list_node_by_locator( ArrayList *list, void *key, int (*compare)(const void *, const void *) )
+ArrayListNode *locate_list_node_by_locator( ArrayList *list, void *key, int ( *compare )( const void *, const void * ) )
 {
   ArrayListNode *p = NULL;
   if( !is_empty_list( list ) ) {
@@ -329,7 +329,7 @@ void *get_list_node_content( ArrayListNode *pos )
   return pos ? pos->data : NULL;
 }
 
-Status list_traverse( ArrayList *list, Status (*handle)(void *) )
+Status list_traverse( ArrayList *list, Status ( *handle )( void * ) )
 {
   ArrayListNode *p;
   Status status = true;
