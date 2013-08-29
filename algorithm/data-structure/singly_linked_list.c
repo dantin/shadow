@@ -24,15 +24,31 @@ void destroy_list_node( SinglyLinkedListNode **node )
   *node = NULL;
 }
 
-Status init_list( SinglyLinkedList *list )
+Status init_list( SinglyLinkedList **listp )
 {
-  if( !list ) {
+  if( !listp || *listp ) {
     return false;
   }
 
+  SinglyLinkedList *list = ( SinglyLinkedList * ) malloc( sizeof( SinglyLinkedList ) );
+  assert( list );
+
+  *listp = list;
   list->head = NULL;
   list->tail = NULL;
   list->size = 0;
+
+  return true;
+}
+
+Status destroy_list( SinglyLinkedList **listp )
+{
+  if( !listp || !*listp ) {
+    return false;
+  }
+
+  free( *listp );
+  *listp = NULL;
 
   return true;
 }
@@ -95,7 +111,7 @@ Status locate_list_node_by_position( SinglyLinkedList *list, long index, SinglyL
   }
 }
 
-SinglyLinkedListNode *locate_list_node_by_locator( SinglyLinkedList *list, void *key, int (*compare)(const void *, const void *) )
+SinglyLinkedListNode *locate_list_node_by_locator( SinglyLinkedList *list, void *key, int ( *compare )( const void *, const void * ) )
 {
   SinglyLinkedListNode *p;
 
@@ -143,77 +159,79 @@ SinglyLinkedListNode *get_next_node( SinglyLinkedList *list, SinglyLinkedListNod
   }
 }
 
-Status insert_list_head( SinglyLinkedList *list, SinglyLinkedListNode *node )
+Status insert_list_head( SinglyLinkedList *list, SinglyLinkedListNode **node )
 {
-  if( node == NULL || node->next != NULL ) {
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
   // 当前线性表为空
-  if( list->head == NULL ) {
+  if( is_empty_list( list ) ) {
     list->head = node;
     list->tail = node;
   } else { // 当前线性表不为空
-    node->next = list->head;
-    list->head = node;
+    ( *node )->next = list->head;
+    list->head = *node;
   }
   list->size++;
 
   return true;
 }
 
-Status append_list_tail( SinglyLinkedList *list, SinglyLinkedListNode *node )
+Status append_list_tail( SinglyLinkedList *list, SinglyLinkedListNode **node )
 {
-  if( node == NULL || node->next != NULL ) {
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
-  if( list->head == NULL ) {
+  if( is_empty_list( list ) ) {
     list->head = node;
     list->tail = node;
   } else {
-    list->tail->next = node;
-    list->tail = node;
+    list->tail->next = *node;
+    list->tail = *node;
   }
   list->size++;
 
   return true;
 }
 
-Status insert_before_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode *node )
+Status insert_before_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode **node )
 {
   SinglyLinkedListNode *previous;
-  if( node == NULL || node->next != NULL ) {
+
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
   if( *pos == get_list_head( list ) ) {
-    insert_list_head( list, node );
-    return true;
+    return insert_list_head( list, node );
   } else if( ( previous = get_previous_node( list, *pos ) ) != NULL ) {
-    node->next = previous->next;
-    previous->next = node;
+    ( *node )->next = previous->next;
+    previous->next = *node;
     list->size++;
+
     return true;
   } else {
     return false;
   }
 }
 
-Status append_after_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode *node )
+Status append_after_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos, SinglyLinkedListNode **node )
 {
   SinglyLinkedListNode *next;
-  if( node == NULL || node->next != NULL ) {
+
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
-  if( *pos == get_list_tail ( list ) ) {
-    append_list_tail( list, node );
-    return true;
+  if( *pos == get_list_tail( list ) ) {
+    return append_list_tail( list, node );
   } else if( ( next = get_next_node( list, *pos ) ) != NULL ) {
-    node->next = next;
-    ( *pos )->next = node;
+    ( *node )->next = next;
+    ( *pos )->next = *node;
     list->size++;
+
     return true;
   } else {
     return false;
@@ -229,7 +247,7 @@ Status delete_list_head( SinglyLinkedList *list, SinglyLinkedListNode **node )
   *node = list->head;
   list->head = ( *node )->next;
   list->size--;
-  if( list->size == 0 ) {
+  if( is_empty_list( list ) ) {
     list->tail = NULL;
   }
 
@@ -240,22 +258,25 @@ Status delete_list_head( SinglyLinkedList *list, SinglyLinkedListNode **node )
 
 Status remove_list_tail( SinglyLinkedList *list, SinglyLinkedListNode **node )
 {
+  SinglyLinkedListNode *previous;
+
   if( is_empty_list( list ) || node == NULL ) {
     return false;
   }
 
   *node = list->tail;
 
-  SinglyLinkedListNode *previous;
   if( *node == get_list_head( list ) ) {
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
+ 
     return true;
   } else if( ( previous = get_previous_node( list, *node ) ) != NULL ) {
     list->tail = previous;
     previous->next = NULL;
     list->size--;
+
     return true;
   } else {
     return false;
@@ -264,11 +285,12 @@ Status remove_list_tail( SinglyLinkedList *list, SinglyLinkedListNode **node )
 
 Status delete_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos )
 {
+  SinglyLinkedListNode *previous;
+
   if( is_empty_list( list ) || pos == NULL || *pos == NULL ) {
     return false;
   }
 
-  SinglyLinkedListNode *previous;
   if( *pos == get_list_head( list ) ) {
     return delete_list_head( list, pos );
   } else if( *pos == get_list_tail( list ) ) {
@@ -277,6 +299,7 @@ Status delete_list_node( SinglyLinkedList *list, SinglyLinkedListNode **pos )
     previous->next = ( *pos )->next;
     ( *pos )->next = NULL;
     list->size--;
+
     return true;
   } else {
     return false;
@@ -308,7 +331,7 @@ void *get_list_node_content( SinglyLinkedListNode *pos )
   return pos ? pos->data : NULL;
 }
 
-Status list_traverse( SinglyLinkedList *list, Status (*handle)(void *) )
+Status list_traverse( SinglyLinkedList *list, Status ( *handle )( void * ) )
 {
   SinglyLinkedListNode *p;
   Status status = true;

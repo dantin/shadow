@@ -103,7 +103,7 @@ Status locate_list_node_by_position( SinglyLinkedList *list, long index, SinglyL
  * key       目标元素指针
  * compare   函数指针，定义目标元素和数据元素之间关系
  */
-SinglyLinkedListNode *locate_list_node_by_locator( SinglyLinkedList *list, void *key, int (*compare)(const void *, const void *) );
+SinglyLinkedListNode *locate_list_node_by_locator( SinglyLinkedList *list, void *key, int ( *compare )( const void *, const void * ) );
 
 /*
  * 搜索单链线性表中目标节点的前驱节点地址
@@ -214,6 +214,6 @@ void *get_list_node_content( SinglyLinkedListNode *node );
  * list    目标线性表指针
  * handle  函数句柄，对线性表中的每一个元素做相应的操作
  */
-Status list_traverse( SinglyLinkedList *list, Status (*handle)(void *) );
+Status list_traverse( SinglyLinkedList *list, Status ( *handle )( void * ) );
 
 #endif
