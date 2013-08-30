@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 
 #include "circular_linked_list.h"
 
@@ -24,15 +25,31 @@ void destroy_list_node( CircularLinkedListNode **node )
   *node = NULL;
 }
 
-Status init_list( CircularLinkedList *list )
+Status init_list( CircularLinkedList **listp )
 {
-  if( !list ) {
+  if( !listp || *listp ) {
     return false;
   }
+
+  CircularLinkedList *list = ( CircularLinkedList * ) malloc( sizeof( CircularLinkedList ) );
+  assert( list );
+  *listp = list;
 
   list->head = NULL;
   list->tail = NULL;
   list->size = 0;
+
+  return true;
+}
+
+Status destroy_list( CircularLinkedList **listp )
+{
+  if( !listp || !*listp ) {
+    return false;
+  }
+
+  free( *listp );
+  *listp = NULL;
 
   return true;
 }
@@ -97,7 +114,7 @@ Status locate_list_node_by_position( CircularLinkedList *list, long index, Circu
   }
 }
 
-CircularLinkedListNode *locate_list_node_by_locator( CircularLinkedList *list, void *key, int (*compare)(const void *, const void *) )
+CircularLinkedListNode *locate_list_node_by_locator( CircularLinkedList *list, void *key, int ( *compare )( const void *, const void * ) )
 {
   CircularLinkedListNode *p;
   long i;
@@ -145,88 +162,90 @@ CircularLinkedListNode *get_next_node( CircularLinkedList *list, CircularLinkedL
     }
   }
 
-  if( i < list_size( list ) && p == pos ) {
+  if( i < list_size( list ) - 1 && p == pos ) {
     return p->next;
   } else {
     return NULL;
   }
 }
 
-Status insert_list_head( CircularLinkedList *list, CircularLinkedListNode *node )
+Status insert_list_head( CircularLinkedList *list, CircularLinkedListNode **node )
 {
-  if( node == NULL || node->next != NULL ) {
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
   // 当前线性表为空
   if( is_empty_list( list ) ) {
-    list->head = node;
-    list->tail = node;
-    node->next = node;
+    list->head = *node;
+    list->tail = *node;
+    ( *node )->next = *node;
   } else { // 当前线性表不为空
-    node->next = list->head;
-    list->head = node;
-    list->tail->next = node;
+    ( *node )->next = list->head;
+    list->head = *node;
+    list->tail->next = *node;
   }
   list->size++;
 
   return true;
 }
 
-Status append_list_tail( CircularLinkedList *list, CircularLinkedListNode *node )
+Status append_list_tail( CircularLinkedList *list, CircularLinkedListNode **node )
 {
-  if( node == NULL || node->next != NULL ) {
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
   if( is_empty_list( list ) ) {
-    list->head = node;
-    list->tail = node;
-    node->next = node;
+    list->head = *node;
+    list->tail = *node;
+    ( *node )->next = *node;
   } else {
-    node->next = list->head;
-    list->tail->next = node;
-    list->tail = node;
+    ( *node )->next = list->head;
+    list->tail->next = *node;
+    list->tail = *node;
   }
   list->size++;
 
   return true;
 }
 
-Status insert_before_list_node( CircularLinkedList *list, CircularLinkedListNode **pos, CircularLinkedListNode *node )
+Status insert_before_list_node( CircularLinkedList *list, CircularLinkedListNode **pos, CircularLinkedListNode **node )
 {
   CircularLinkedListNode *previous;
-  if( node == NULL || node->next != NULL ) {
+
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
   if( *pos == get_list_head( list ) ) {
-    insert_list_head( list, node );
-    return true;
+    return insert_list_head( list, node );
   } else if( ( previous = get_previous_node( list, *pos ) ) != NULL ) {
-    node->next = previous->next;
-    previous->next = node;
+    ( *node )->next = previous->next;
+    previous->next = *node;
     list->size++;
+
     return true;
   } else {
     return false;
   }
 }
 
-Status append_after_list_node( CircularLinkedList *list, CircularLinkedListNode **pos, CircularLinkedListNode *node )
+Status append_after_list_node( CircularLinkedList *list, CircularLinkedListNode **pos, CircularLinkedListNode **node )
 {
   CircularLinkedListNode *next;
-  if( node == NULL || node->next != NULL ) {
+
+  if( node == NULL || *node == NULL || ( *node )->next != NULL ) {
     return false;
   }
 
   if( *pos == get_list_tail ( list ) ) {
-    append_list_tail( list, node );
-    return true;
+    return append_list_tail( list, node );
   } else if( ( next = get_next_node( list, *pos ) ) != NULL ) {
-    node->next = next;
-    ( *pos )->next = node;
+    ( *node )->next = next;
+    ( *pos )->next = *node;
     list->size++;
+
     return true;
   } else {
     return false;
@@ -243,7 +262,7 @@ Status delete_list_head( CircularLinkedList *list, CircularLinkedListNode **node
   list->head = ( *node )->next;
   list->tail->next = list->head;
   list->size--;
-  if( list->size == 0 ) {
+  if( is_empty_list( list ) ) {
     list->head = NULL;
     list->tail = NULL;
   }
@@ -255,24 +274,27 @@ Status delete_list_head( CircularLinkedList *list, CircularLinkedListNode **node
 
 Status remove_list_tail( CircularLinkedList *list, CircularLinkedListNode **node )
 {
+  CircularLinkedListNode *previous;
+
   if( is_empty_list( list ) || node == NULL ) {
     return false;
   }
 
   *node = list->tail;
 
-  CircularLinkedListNode *previous;
   if( *node == get_list_head( list ) ) {
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
     ( *node )->next = NULL;
+
     return true;
   } else if( ( previous = get_previous_node( list, *node ) ) != NULL ) {
     list->tail = previous;
     previous->next = list->head;
     list->size--;
     ( *node )->next = NULL;
+
     return true;
   } else {
     return false;
@@ -281,11 +303,12 @@ Status remove_list_tail( CircularLinkedList *list, CircularLinkedListNode **node
 
 Status delete_list_node( CircularLinkedList *list, CircularLinkedListNode **pos )
 {
+  CircularLinkedListNode *previous;
+
   if( is_empty_list( list ) || pos == NULL || *pos == NULL ) {
     return false;
   }
 
-  CircularLinkedListNode *previous;
   if( *pos == get_list_head( list ) ) {
     return delete_list_head( list, pos );
   } else if( *pos == get_list_tail( list ) ) {
@@ -294,6 +317,7 @@ Status delete_list_node( CircularLinkedList *list, CircularLinkedListNode **pos 
     previous->next = ( *pos )->next;
     ( *pos )->next = NULL;
     list->size--;
+
     return true;
   } else {
     return false;
@@ -325,7 +349,7 @@ void *get_list_node_content( CircularLinkedListNode *pos )
   return pos ? pos->data : NULL;
 }
 
-Status list_traverse( CircularLinkedList *list, Status (*handle)(void *) )
+Status list_traverse( CircularLinkedList *list, Status ( *handle )( void * ) )
 {
   CircularLinkedListNode *p;
   long i;
