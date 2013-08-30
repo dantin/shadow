@@ -62,7 +62,6 @@ Status clear_list( SinglyLinkedList *list, Status ( *clear )( void * ) )
   p = get_list_head( list );
   while( p ) {
     t = p->next;
-    list->head = p;
 
     if( clear ) {
       status = clear( p->data );
@@ -74,6 +73,7 @@ Status clear_list( SinglyLinkedList *list, Status ( *clear )( void * ) )
     destroy_list_node( &p );
     list->size--;
     p = t;
+    list->head = p;
   }
 
   if( status ) {
