@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 
 #include "singly_linked_list.h"
 
@@ -167,8 +168,8 @@ Status insert_list_head( SinglyLinkedList *list, SinglyLinkedListNode **node )
 
   // 当前线性表为空
   if( is_empty_list( list ) ) {
-    list->head = node;
-    list->tail = node;
+    list->head = *node;
+    list->tail = *node;
   } else { // 当前线性表不为空
     ( *node )->next = list->head;
     list->head = *node;
@@ -185,8 +186,8 @@ Status append_list_tail( SinglyLinkedList *list, SinglyLinkedListNode **node )
   }
 
   if( is_empty_list( list ) ) {
-    list->head = node;
-    list->tail = node;
+    list->head = *node;
+    list->tail = *node;
   } else {
     list->tail->next = *node;
     list->tail = *node;

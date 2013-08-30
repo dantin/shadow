@@ -219,32 +219,36 @@ int main( void )
   insert_before_list_node( list, &target, &node );
   print( list );
 
+  printf( "新建节点\n" );
   Element *another = ( Element * ) malloc( sizeof( Element ) );
   another->intVal = 30;
   make_list_node( &node, another );
-  printf( "新建节点\n" );
   print_element( node->data );
   printf( "\n" );
+
   printf( "插入%d后\n", 2 );
-  locate_list_node_by_position( &list, 2, &target );
-  append_after_list_node( &list, &target, node );
-  print( &list );
+  locate_list_node_by_position( list, 2, &target );
+  append_after_list_node( list, &target, &node );
+  print( list );
 
   printf( "获取位置为%d的节点内容\n", 2 );
-  print_element( target->data );
-  printf( " --> %d\n", ( ( Element * ) get_list_node_content( target ) )->intVal );
+  locate_list_node_by_position( list, 2, &target );
+  Element *content = ( Element * ) get_list_node_content( target );
+  print_element( content );
+  printf( " --> %d\n", content->intVal );
 
   printf( "清理位置为%d的节点内容\n", 2 );
-  clear( get_list_node_content( target ) );
+  clear( content );
   printf( "设置位置为%d的节点内容为%d\n", 2, 40 );
   Element *third = ( Element * ) malloc( sizeof( Element ) );
   third->intVal = 40;
   set_list_node_content( target, third );
-  print( &list );
+  print( list );
 
   third = NULL;
 
-  clear_list( &list, clear );
+  clear_list( list, clear );
+  destroy_list( &list );
   
   return 0;
 }
