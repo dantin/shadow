@@ -2,7 +2,7 @@
 #define __DOUBLY_LINKED_LIST_H__
 
 /*
- * 双链通用线性表
+ * 通用双链线性表
  */
 
 #include <stdbool.h>
@@ -38,16 +38,23 @@ Status make_list_node( DoublyLinkedListNode **node, void *data );
 /*
  * 释放双链线性表节点
  *
- * node   待释放的节点地址
+ * node   释放后的节点地址
  */
 void destroy_list_node( DoublyLinkedListNode **node );
 
 /*
  * 构造一个空的双链线性表
  *
- * list   目标线性表指针
+ * list   返回的空线性表指针
  */
-Status init_list( DoublyLinkedList *list );
+Status init_list( DoublyLinkedList **list );
+
+/*
+ * 释放一个空的双链线性表
+ *
+ * list   返回的线性表指针地址
+ */
+Status destroy_list( DoublyLinkedList **list );
 
 /*
  * 将双链线性表重置为空表，并释放原链表节点空间
@@ -70,7 +77,7 @@ bool is_empty_list( DoublyLinkedList *list );
 /*
  * 获取双链线性表大小
  *
- * 返回单链线性表中元素个数
+ * 返回双链线性表中元素个数
  *
  * list   目标线性表指针
  */
@@ -94,16 +101,16 @@ Status locate_list_node_by_position( DoublyLinkedList *list, long index, DoublyL
  * 找不到返回NULL
  *
  * list      目标线性表指针
- * key       目标元素
+ * key       目标元素指针
  * compare   函数指针，定义目标元素和数据元素之间关系
  */
-DoublyLinkedListNode *locate_list_node_by_locator( DoublyLinkedList *list, void *key, int (*compare)(const void *, const void *) );
+DoublyLinkedListNode *locate_list_node_by_locator( DoublyLinkedList *list, void *key, int ( *compare )( const void *, const void * ) );
 
 /*
  * 搜索双链线性表中目标节点的前驱节点地址
  *
  * list   目标线性表指针
- * pos    目标节点
+ * pos    目标节点指针
  */
 DoublyLinkedListNode *get_previous_node( DoublyLinkedList *list, DoublyLinkedListNode *pos );
 
@@ -111,43 +118,43 @@ DoublyLinkedListNode *get_previous_node( DoublyLinkedList *list, DoublyLinkedLis
  * 搜索双链线性表中目标节点的后继节点地址
  *
  * list   目标线性表指针
- * pos    目标节点
+ * pos    目标节点指针
  */
 DoublyLinkedListNode * get_next_node( DoublyLinkedList *list, DoublyLinkedListNode *pos );
 
 /*
- * 将节点插入双链线性表表头
+ * 将节点插入双链线性表表头，插入成功后，node为空
  *
  * list      目标线性表指针
- * node      待插节点指针
+ * node      待插节点指针地址
  */
-Status insert_list_head( DoublyLinkedList *list, DoublyLinkedListNode *node );
+Status insert_list_head( DoublyLinkedList *list, DoublyLinkedListNode **node );
 
 /*
- * 将节点插入双链线性表表尾
+ * 将节点插入双链线性表表尾，插入成功后，node为空
  *
  * list      目标线性表指针
- * node      待插节点指针
+ * node      待插节点指针地址
  */
-Status append_list_tail( DoublyLinkedList *list, DoublyLinkedListNode *node );
+Status append_list_tail( DoublyLinkedList *list, DoublyLinkedListNode **node );
 
 /*
- * 将节点插入双链线性表中某一位置之前
+ * 将节点插入双链线性表中某一位置之前，插入成功后，node为空
  *
  * list    目标线性表指针
- * data    目标插入位置
- * index   目标节点
+ * pos     目标插入位置指针
+ * node    目标节点指针地址
  */
-Status insert_before_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode *node );
+Status insert_before_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode **node );
 
 /*
- * 将节点插入双链线性表中某一位置之后
+ * 将节点插入双链线性表中某一位置之后，插入成功后，node为空
  *
  * list    目标线性表指针
- * pos     目标插入位置
- * node    目标节点
+ * pos     目标插入位置指针
+ * node    目标节点指针地址
  */
-Status append_after_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode *node );
+Status append_after_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode **node );
 
 /*
  * 删除双链线性表表头节点，并以node返回
@@ -166,12 +173,12 @@ Status delete_list_head( DoublyLinkedList *list, DoublyLinkedListNode **node );
 Status remove_list_tail( DoublyLinkedList *list, DoublyLinkedListNode **node );
 
 /*
- * 删除一个节点
+ * 删除一个节点，并以node返回
  *
  * list   目标线性表指针
- * pos    待删除节点位置
+ * node   待删除节点位置指针
  */
-Status delete_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos );
+Status delete_list_node( DoublyLinkedList *list, DoublyLinkedListNode **node );
 
 /*
  * 返回双链线性表的表头位置
@@ -193,14 +200,14 @@ DoublyLinkedListNode *get_list_tail( DoublyLinkedList *list );
  * node   目标节点
  * data   数据内容
  */
-Status set_list_node_content( DoublyLinkedListNode *pos, void *data );
+Status set_list_node_content( DoublyLinkedListNode *node, void *data );
 
 /*
  * 获取节点内容
  *
  * node   目标节点
  */
-void *get_list_node_content( DoublyLinkedListNode *pos );
+void *get_list_node_content( DoublyLinkedListNode *node );
 
 /*
  * 双链线性表遍历
@@ -208,6 +215,6 @@ void *get_list_node_content( DoublyLinkedListNode *pos );
  * list    目标线性表指针
  * handle  函数句柄，对线性表中的每一个元素做相应的操作
  */
-Status list_traverse( DoublyLinkedList *list, Status (*handle)(void *) );
+Status list_traverse( DoublyLinkedList *list, Status ( *handle )( void * ) );
 
 #endif

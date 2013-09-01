@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 
 #include "doubly_linked_list.h"
 
@@ -25,15 +26,31 @@ void destroy_list_node( DoublyLinkedListNode **node )
   *node = NULL;
 }
 
-Status init_list( DoublyLinkedList *list )
+Status init_list( DoublyLinkedList **listp )
 {
-  if( !list ) {
+  if( !listp || *listp ) {
     return false;
   }
+
+  DoublyLinkedList *list = ( DoublyLinkedList * ) malloc( sizeof( DoublyLinkedList ) );
+  assert( list );
+  *listp = list;
 
   list->head = NULL;
   list->tail = NULL;
   list->size = 0;
+
+  return true;
+}
+
+Status destroy_list( DoublyLinkedList **listp )
+{
+  if( !listp || !*listp ) {
+    return false;
+  }
+
+  free( *listp );
+  *listp = NULL;
 
   return true;
 }
@@ -46,7 +63,6 @@ Status clear_list( DoublyLinkedList *list, Status ( *clear )( void * ) )
   p = get_list_head( list );
   while( p ) {
     t = p->next;
-    list->head = p;
 
     if( clear ) {
       status = clear( p->data );
@@ -58,6 +74,7 @@ Status clear_list( DoublyLinkedList *list, Status ( *clear )( void * ) )
     destroy_list_node( &p );
     list->size--;
     p = t;
+    list->head = p;
   }
 
   if( status ) {
@@ -96,7 +113,7 @@ Status locate_list_node_by_position( DoublyLinkedList *list, long index, DoublyL
   }
 }
 
-DoublyLinkedListNode *locate_list_node_by_locator( DoublyLinkedList *list, void *key, int (*compare)(const void *, const void *) )
+DoublyLinkedListNode *locate_list_node_by_locator( DoublyLinkedList *list, void *key, int ( *compare )( const void *, const void * ) )
 {
   DoublyLinkedListNode *p;
 
@@ -143,83 +160,85 @@ DoublyLinkedListNode *get_next_node( DoublyLinkedList *list, DoublyLinkedListNod
   }
 }
 
-Status insert_list_head( DoublyLinkedList *list, DoublyLinkedListNode *node )
+Status insert_list_head( DoublyLinkedList *list, DoublyLinkedListNode **node )
 {
-  if( node == NULL || !( node->next == NULL && node->previous == NULL ) ) {
+  if( node == NULL || *node == NULL || !( ( *node )->next == NULL && ( *node )->previous == NULL ) ) {
     return false;
   }
 
   // 当前线性表为空
-  if( list->size == 0 ) {
-    list->head = node;
-    list->tail = node;
+  if( is_empty_list( list ) ) {
+    list->head = *node;
+    list->tail = *node;
   } else { // 当前线性表不为空
-    node->next = list->head;
-    list->head->previous = node;
-    list->head = node;
+    ( *node )->next = list->head;
+    list->head->previous = *node;
+    list->head = *node;
   }
   list->size++;
 
   return true;
 }
 
-Status append_list_tail( DoublyLinkedList *list, DoublyLinkedListNode *node )
+Status append_list_tail( DoublyLinkedList *list, DoublyLinkedListNode **node )
 {
-  if( node == NULL || !( node->next == NULL && node->previous == NULL ) ) {
+  if( node == NULL || *node == NULL || !( ( *node )->next == NULL && ( *node )->previous == NULL ) ) {
     return false;
   }
 
   if( list->size == 0 ) {
-    list->head = node;
-    list->tail = node;
+    list->head = *node;
+    list->tail = *node;
   } else {
-    node->previous = list->tail;
-    list->tail->next = node;
-    list->tail = node;
+    ( *node )->previous = list->tail;
+    list->tail->next = *node;
+    list->tail = *node;
   }
   list->size++;
 
   return true;
 }
 
-Status insert_before_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode *node )
+Status insert_before_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode **node )
 {
   DoublyLinkedListNode *previous;
-  if( node == NULL || !( node->next == NULL && node->previous == NULL ) ) {
+
+  if( node == NULL || *node == NULL || !( ( *node )->next == NULL && ( *node )->previous == NULL ) ) {
     return false;
   }
 
   if( *pos == get_list_head( list ) ) {
-    insert_list_head( list, node );
-    return true;
+    return insert_list_head( list, node );
   } else if( ( previous = get_previous_node( list, *pos ) ) != NULL ) {
-    node->next = *pos;
-    node->previous = previous;
-    ( *pos )->previous = node;
-    previous->next = node;
+    ( *node )->next = *pos;
+    ( *node )->previous = previous;
+    ( *pos )->previous = *node;
+    previous->next = *node;
     list->size++;
+
     return true;
   } else {
     return false;
   }
 }
 
-Status append_after_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode *node )
+Status append_after_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos, DoublyLinkedListNode **node )
 {
   DoublyLinkedListNode *next;
-  if( node == NULL || !( node->next == NULL && node->previous == NULL ) ) {
+
+  if( node == NULL || *node == NULL || !( ( *node )->next == NULL && ( *node )->previous == NULL ) ) {
     return false;
   }
 
   if( *pos == get_list_tail ( list ) ) {
-    append_list_tail( list, node );
-    return true;
+    return append_list_tail( list, node );
   } else if( ( next = get_next_node( list, *pos ) ) != NULL ) {
-    node->previous = *pos;
-    node->next = next;
-    ( *pos )->next = node;
-    next->previous = node;
+    ( *node )->previous = *pos;
+    ( *node )->next = next;
+    ( *pos )->next = *node;
+    next->previous = *node;
     list->size++;
+
     return true;
   } else {
     return false;
@@ -236,7 +255,7 @@ Status delete_list_head( DoublyLinkedList *list, DoublyLinkedListNode **node )
   list->head = ( *node )->next;
   list->head->previous = NULL;
   list->size--;
-  if( list->size == 0 ) {
+  if( is_empty_list( list ) ) {
     list->tail = NULL;
   }
 
@@ -256,21 +275,23 @@ Status remove_list_tail( DoublyLinkedList *list, DoublyLinkedListNode **node )
   list->tail = ( *node )->previous;
   list->tail->next = NULL;
   list->size--;
-  if( list->size == 0 ) {
+  if( is_empty_list( list ) ) {
     list->head = NULL;
   }
 
   ( *node )->previous = NULL;
+
   return true;
 }
 
 Status delete_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos )
 {
+  DoublyLinkedListNode *previous;
+
   if( is_empty_list( list ) || pos == NULL || *pos == NULL ) {
     return false;
   }
 
-  DoublyLinkedListNode *previous;
   if( *pos == get_list_head( list ) ) {
     return delete_list_head( list, pos );
   } else if( *pos == get_list_tail( list ) ) {
@@ -281,6 +302,7 @@ Status delete_list_node( DoublyLinkedList *list, DoublyLinkedListNode **pos )
     ( *pos )->next = NULL;
     ( *pos )->previous = NULL;
     list->size--;
+
     return true;
   } else {
     return false;
