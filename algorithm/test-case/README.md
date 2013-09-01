@@ -10,31 +10,23 @@
 
 #### 通用双链线性表 doubly-linked-list
 
+## 算法
+
+### 递归和非递归算法
+
+#### ackerman函数
+
+#### factorial函数
+
+#### fibonacci函数
+
 ## 习题
 
-## ackerman
+### 大数运算 big-integer
 
-ackerman函数的递归算法
+### 循环链表的删除 circular-count
 
-## big-integer
-大数运算
+### 单链删除 min-remove
 
-## circular-count
+### 多项式运算 polynomial
 
-循环链表的删除
-
-## factorial
-
-阶乘的递归及非递归算法
-
-## fibonacci
-
-斐波那契函数的递归及非递归算法
-
-## min-remove
-
-单链的删除
-
-## polynomial
-
-多项式运算
