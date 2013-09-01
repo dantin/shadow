@@ -1,10 +1,20 @@
+## 数据结构
+
+### 线性表
+
+#### 通用顺序线性表 array-list
+
+#### 通用单链线性表 singly-linked-list
+
+#### 通用循环线性表 circular-linked-list
+
+#### 通用双链线性表 doubly-linked-list
+
+## 习题
+
 ## ackerman
 
 ackerman函数的递归算法
-
-## array-list
-
-array list的数据结构及测试
 
 ## big-integer
 大数运算
@@ -12,14 +22,6 @@ array list的数据结构及测试
 ## circular-count
 
 循环链表的删除
-
-## circular-linked-list
-
-循环链表的数据结构及测试
-
-## doubly-linked-list
-
-双链的数据结构及测试
 
 ## factorial
 
@@ -36,7 +38,3 @@ array list的数据结构及测试
 ## polynomial
 
 多项式运算
-
-## singly-linked-list
-
-单链的数据结构及测试
