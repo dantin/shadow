@@ -48,7 +48,7 @@ void print( CircularLinkedList *list )
 
 int main( void )
 {
-  CircularLinkedList list;
+  CircularLinkedList *list = NULL;
   int size, step;
 
   // 获得输入信息
@@ -65,10 +65,10 @@ int main( void )
     *element = i;
     CircularLinkedListNode *node;
     if( make_list_node( &node, element ) ) {
-      append_list_tail( &list, node );
+      append_list_tail( list, &node );
     }
   }
-  print( &list );
+  print( list );
 
   // 循环计算出列号码
   CircularLinkedListNode *p, *t;
@@ -76,13 +76,13 @@ int main( void )
 
   count = 0;
   inc = 0;
-  p = get_list_head( &list );
+  p = get_list_head( list );
   while( true ) {
     t = p->next;
 
     if( count % ( step + inc ) == 0 ) {
       CircularLinkedListNode *pos = p;
-      if( delete_list_node( &list, &pos ) ) {
+      if( delete_list_node( list, &pos ) ) {
 	print_element( get_list_node_content( pos ) );
 	clear( get_list_node_content( pos ) );
 	destroy_list_node( &pos );
@@ -93,13 +93,14 @@ int main( void )
     count++;
     p = t;
 
-    if( is_empty_list( &list ) ) {
+    if( is_empty_list( list ) ) {
       break;
     }
   }
   printf( "\n" );
 
-  clear_list( &list, clear );
-  
+  clear_list( list, clear );
+  destroy_list( &list );
+
   return 0;
 }

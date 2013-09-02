@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
 
-circular_count: circular_linked_list.o main.o
-	$(CC) $(CFLAGS) -o circular_count circular_linked_list.o main.o
+demo: circular_linked_list.o main.o
+	$(CC) $(CFLAGS) -o demo circular_linked_list.o main.o
 
 circular_linked_list.o: init circular_linked_list.h circular_linked_list.c
 	$(CC) $(CFLAGS) -c circular_linked_list.c
@@ -15,7 +15,10 @@ init:
 	cp ../../data-structure/circular_linked_list.c .
 
 clean:
-	rm circular_linked_list.h circular_linked_list.c main.o circular_linked_list.o circular_count
+	rm circular_linked_list.h circular_linked_list.c main.o circular_linked_list.o demo
 
-test:
-	./circular_count < data/input
+test: demo
+	./demo < data/input
+
+memcheck: demo
+	valgrind --tool=memcheck ./demo < data/input
