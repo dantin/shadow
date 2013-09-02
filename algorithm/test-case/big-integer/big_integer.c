@@ -5,12 +5,10 @@
 
 #include "big_integer.h"
 
-static Status clear_big_integer_element( void *elem )
+static Status clear_big_integer_element( void *element )
 {
-  char *element = ( char * ) elem;
-
   if( element ) {
-    free( element );
+    free( ( char * ) element );
     return true;
   } else {
     return false;
@@ -40,20 +38,19 @@ void print_big_integer( BigInteger *big_integer )
 BigInteger *read_big_integer( void )
 {
   int c;
-  BigInteger *big_integer;
+  BigInteger *big_integer = NULL;
   BigIntegerElement *node;
+  char *digit;
 
-  big_integer = ( BigInteger * ) malloc( sizeof( BigInteger ) );
-  assert( big_integer );
-  init_list( big_integer );
+  init_list( &big_integer );
 
   // handle heading '-' or '+'
   c = getchar();
   if( c == '-' || c == '+' ) {
-    char *digit = ( char * ) malloc( sizeof( char ) );
+    digit = ( char * ) malloc( sizeof( char ) );
     *digit = c;
     if( make_list_node( &node, digit ) ) {
-      append_list_tail( big_integer, node );
+      append_list_tail( big_integer, &node );
     }
   }
 
@@ -62,10 +59,10 @@ BigInteger *read_big_integer( void )
       break;
     }
 
-    char *digit = ( char * ) malloc( sizeof( char ) );
+    digit = ( char * ) malloc( sizeof( char ) );
     *digit = c;
     if( make_list_node( &node, digit ) ) {
-      append_list_tail( big_integer, node );
+      append_list_tail( big_integer, &node );
     }
     c = getchar();
   }
@@ -73,37 +70,35 @@ BigInteger *read_big_integer( void )
   if( !is_empty_list( big_integer ) && !( list_size( big_integer ) == 1 && ( *( ( char * ) get_list_node_content( get_list_head( big_integer ) ) ) == '-' || *( ( char * ) get_list_node_content( get_list_head( big_integer ) ) ) == '+' ) ) ) {
     return big_integer;
   } else {
-    free( big_integer );
+    destroy_list( &big_integer );
     return NULL;
   }
 }
 
 BigInteger *init_big_integer( int value )
 {
-  BigInteger *big_integer;
+  BigInteger *big_integer = NULL;
   BigIntegerElement *node;
+  char *digit;
 
-  big_integer = ( BigInteger * ) malloc( sizeof( BigInteger ) );
-  assert( big_integer );
-
-  init_list( big_integer );
+  init_list( &big_integer );
 
   if( value < 0 ) {
-    char *digit = ( char * ) malloc( sizeof( char ) );
+    digit = ( char * ) malloc( sizeof( char ) );
     *digit = '-';
     if( make_list_node( &node, digit ) ) {
-      append_list_tail( big_integer, node );
+      append_list_tail( big_integer, &node );
     }
 
     value = -value;
   }
 
   do {
-    char *digit = ( char * ) malloc( sizeof( char ) );
+    digit = ( char * ) malloc( sizeof( char ) );
     *digit = value % 10 + '0';
 
     if( make_list_node( &node, digit ) ) {
-      append_list_tail( big_integer, node );
+      append_list_tail( big_integer, &node );
     }
 
     value /= 10;
@@ -112,7 +107,7 @@ BigInteger *init_big_integer( int value )
   if( !is_empty_list( big_integer ) ) {
     return big_integer;
   } else {
-    free( big_integer );
+    destroy_list( &big_integer );
     return NULL;
   }
 }
@@ -120,29 +115,28 @@ BigInteger *init_big_integer( int value )
 void destroy_big_integer( BigInteger **big_integer )
 {
   clear_list( *big_integer, clear_big_integer_element );
-  free( *big_integer );
-  *big_integer = NULL;
+  destroy_list( big_integer );
 }
 
 BigInteger *add( BigInteger *number1, BigInteger *number2 )
 {
-  BigIntegerElement *a, *b;
-  BigInteger *sum;
+  BigIntegerElement *a, *b, *node;
+  BigInteger *sum = NULL;
+  char *digit;
   int s;
 
-  sum = ( BigInteger * ) malloc( sizeof( BigInteger ) );
-  init_list( sum );
+  init_list( &sum );
   for( s = 0, a = get_list_tail( number1 ), b = get_list_tail( number2 ); a || b; ) {
     int i, j;
     
     i = a ? *( ( char * )get_list_node_content( a ) ) - '0' : 0;
     j = b ? *( ( char * )get_list_node_content( b ) ) - '0' : 0;
     s = i + j + s;
-    char *digit = ( char * ) malloc( sizeof( char ) );
+    digit = ( char * ) malloc( sizeof( char ) );
     *digit = s % 10 + '0';
-    BigIntegerElement *node;
+    
     if( make_list_node( &node, digit ) ) {
-      insert_list_head( sum, node );
+      insert_list_head( sum, &node );
     }
     s = s / 10;
     if( a ) {
@@ -154,11 +148,11 @@ BigInteger *add( BigInteger *number1, BigInteger *number2 )
   }
 
   while( s ) {
-    char *digit = ( char * ) malloc( sizeof( char ) );
+    digit = ( char * ) malloc( sizeof( char ) );
     *digit = s % 10 + '0';
-    BigIntegerElement *node;
+
     if( make_list_node( &node, digit ) ) {
-      insert_list_head( sum, node );
+      insert_list_head( sum, &node );
     }
     s = s / 10;
   }
@@ -166,40 +160,38 @@ BigInteger *add( BigInteger *number1, BigInteger *number2 )
   if( !is_empty_list( sum ) ) {
     return sum;
   } else {
-    free( sum );
+    destroy_list( &sum );
     return NULL;
   }
 }
 
 static BigInteger *multiply_int( BigInteger *number1, int value )
 {
-  BigInteger *multiply;
-  BigIntegerElement *p;
+  BigInteger *multiply = NULL;
+  BigIntegerElement *p, *node;
+  char *digit;
   int remaining;
 
-  multiply = ( BigInteger * ) malloc( sizeof( BigInteger ) );
-  assert( multiply );
-
-  init_list( multiply );
+  init_list( &multiply );
   for( remaining = 0, p = get_list_tail( number1 ); p; p = p->previous ) {
     int i = *( ( char * ) get_list_node_content( p ) ) - '0';
     int t = i * value + remaining;
 
-    char *digit = ( char * ) malloc( sizeof( char ) );
+    digit = ( char * ) malloc( sizeof( char ) );
     *digit = t % 10 + '0';
-    BigIntegerElement *node;
+
     if( make_list_node( &node, digit ) ) {
-      insert_list_head( multiply, node );
+      insert_list_head( multiply, &node );
     }
     remaining = t / 10;
   }
 
   while( remaining ) {
-    char *digit =  ( char * ) malloc( sizeof( char ) );
+    digit =  ( char * ) malloc( sizeof( char ) );
     *digit = remaining % 10 + '0';
-    BigIntegerElement *node;
+
     if( make_list_node( &node, digit ) ) {
-      insert_list_head( multiply, node );
+      insert_list_head( multiply, &node );
     }
     remaining /= 10;
   }
@@ -207,7 +199,7 @@ static BigInteger *multiply_int( BigInteger *number1, int value )
   if( !is_empty_list( multiply ) ) {
     return multiply;
   } else {
-    free( multiply );
+    destroy_list( &multiply );
     return NULL;
   }
 }
@@ -217,16 +209,17 @@ BigInteger *multiply( BigInteger *number1, BigInteger *number2 )
   BigInteger *sum = init_big_integer( 0 );
   BigInteger *temp;
   int scale = 0;
-  BigIntegerElement *p;
+  BigIntegerElement *p, *node;
+
   for( p = get_list_tail( number2 ), scale = 0; p; p = p->previous, scale++ ) {
     int i = *( ( char * ) get_list_node_content( p ) ) - '0';
     temp = multiply_int( number1, i );
     for( int s = 0; s < scale; s++ ) {
       char *digit = ( char * ) malloc( sizeof( char ) );
       *digit = '0';
-      BigIntegerElement *node;
+
       if( make_list_node( &node, digit ) ) {
-	append_list_tail( temp, node );
+	append_list_tail( temp, &node );
       }
     }
 
@@ -246,20 +239,18 @@ BigInteger *multiply( BigInteger *number1, BigInteger *number2 )
 
 BigInteger *absolute( BigInteger *number )
 {
-  BigInteger *abs;
+  BigInteger *abs = NULL;
   BigIntegerElement *p, *node;
   char c;
 
-  abs = ( BigInteger * ) malloc( sizeof( BigInteger ) );
-  assert( abs );
-  init_list( abs );
+  init_list( &abs );
 
   for( p = get_list_head( number ); p; p = p->next ) {
     if( isdigit( c = *( ( char * ) get_list_node_content( p ) ) ) ) {
       char *digit = ( char * ) malloc( sizeof( char ) );
       *digit = c;
       if( make_list_node( &node, digit ) ) {
-	append_list_tail( abs, node );
+	append_list_tail( abs, &node );
       }
     }
   }

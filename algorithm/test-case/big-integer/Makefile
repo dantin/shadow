@@ -20,5 +20,8 @@ init:
 clean:
 	rm -f doubly_linked_list.h doubly_linked_list.c main.o doubly_linked_list.o big_integer.o demo
 
-test:
+test: demo
 	./demo < data/input
+
+memcheck: demo
+	valgrind --tool=memcheck ./demo < data/input
