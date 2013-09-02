@@ -49,7 +49,9 @@ void print( CircularLinkedList *list )
 int main( void )
 {
   CircularLinkedList *list = NULL;
-  int size, step;
+  int size, step, count;
+  CircularLinkedListNode *node, *p, *t;
+  int *element;
 
   // 获得输入信息
   printf( "输入人数：" );
@@ -61,9 +63,8 @@ int main( void )
   init_list( &list );
 
   for( int i = 1; i <= size; i++ ) {
-    int *element = ( int * ) malloc( sizeof( int ) );
+    element = ( int * ) malloc( sizeof( int ) );
     *element = i;
-    CircularLinkedListNode *node;
     if( make_list_node( &node, element ) ) {
       append_list_tail( list, &node );
     }
@@ -71,30 +72,29 @@ int main( void )
   print( list );
 
   // 循环计算出列号码
-  CircularLinkedListNode *p, *t;
-  int count, inc;
-
   count = 0;
-  inc = 0;
+
   p = get_list_head( list );
   while( true ) {
     t = p->next;
 
-    if( count % ( step + inc ) == 0 ) {
-      CircularLinkedListNode *pos = p;
-      if( delete_list_node( list, &pos ) ) {
-	print_element( get_list_node_content( pos ) );
-	clear( get_list_node_content( pos ) );
-	destroy_list_node( &pos );
+    if( count % step == 0 ) {
+      node = p;
+      if( delete_list_node( list, &node ) ) {
+	element = ( int * ) get_list_node_content( node );
+	print_element( element );
+	clear( element );
+	destroy_list_node( &node );
       }
-      count = 0;
-      inc++;
+      count = 0; // 重新计数
+      step++;
     }
     count++;
-    p = t;
 
     if( is_empty_list( list ) ) {
       break;
+    } else {
+      p = t;
     }
   }
   printf( "\n" );
