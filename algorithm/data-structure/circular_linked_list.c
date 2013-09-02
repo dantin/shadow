@@ -60,7 +60,7 @@ Status clear_list( CircularLinkedList *list, Status ( *clear )( void * ) )
   CircularLinkedListNode *p, *t;
 
   p = get_list_head( list );
-  while( list->size > 0 ) {
+  while( !is_empty_list( list ) ) {
     t = p->next;
 
     if( clear ) {
@@ -72,9 +72,11 @@ Status clear_list( CircularLinkedList *list, Status ( *clear )( void * ) )
     }
     destroy_list_node( &p );
     list->size--;
-    p = t;
-    list->head = p;
-    list->tail->next = p;
+    if( !is_empty_list( list ) ) {
+      p = t;
+      list->head = p;
+      list->tail->next = p;
+    }
   }
 
   if( status ) {
