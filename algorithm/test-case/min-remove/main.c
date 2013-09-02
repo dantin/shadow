@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include "singly_linked_list.h"
 
-int compare( const void *value1, const void *value2 )
+int compare( const void *data, const void *key )
 {
-  int *value = ( int * ) value1;
-  int *base = ( int * ) value2;
+  int *value = ( int * ) data;
+  int *base = ( int * ) key;
 
   if( *value == *base ) {
     return 0;
@@ -21,12 +20,10 @@ int compare( const void *value1, const void *value2 )
 /*
  * 释放元素空间
  */
-Status clear( void *elem )
+Status clear( void *element )
 {
-  int *element = ( int * ) elem;
-
   if( element ) {
-    free( element );
+    free( ( int * ) element );
     return true;
   } else {
     return false;
@@ -37,11 +34,13 @@ Status clear( void *elem )
  * 打印元素
  */
 Status print_element( void *data ) {
+  int *element;
+
   if( data == NULL ) {
     return false;
   }
 
-  int *element = ( int * ) data;
+  element = ( int * ) data;
   printf( "{%d} ", *element);
   return true;
 }
@@ -62,46 +61,48 @@ void print( SinglyLinkedList *list )
 
 int main( void )
 {
-  SinglyLinkedList list;
+  SinglyLinkedList *list = NULL;
+  SinglyLinkedListNode *node, *min, *p;
   int i;
 
   // 初始化循环链表
   init_list( &list );
 
+  // 读入输入数据
   while( scanf( "%d", &i ) != EOF ) {
     int *element = ( int * ) malloc( sizeof( int ) );
     *element = i;
-    SinglyLinkedListNode *node;
     if( make_list_node( &node, element ) ) {
-      append_list_tail( &list, node );
+      append_list_tail( list, &node );
     }
   }
-  print( &list );
+  print( list );
 
   // 从链表中查找最小的节点，删除它
   while( true ) {
-    if( is_empty_list( &list ) ) {
+    if( is_empty_list( list ) ) {
       break;
     }
 
-    SinglyLinkedListNode *min, *p;
-    for( p = get_list_head( &list ), min = p; p; p = p->next ) {
+    for( p = get_list_head( list ), min = p; p; p = p->next ) {
+      // *p < *min
       if( compare( get_list_node_content( p ), get_list_node_content( min ) ) == -1 ) {
 	min = p;
       }      
     }
 
-    if( delete_list_node( &list, &min ) ) {
+    if( delete_list_node( list, &min ) ) {
       printf( "delete " );
       print_element( get_list_node_content( min ) );
       clear( get_list_node_content( min ) );
       destroy_list_node( &min );
       printf( "\n" );
     }
-    print( &list );
+    print( list );
   }
 
-  clear_list( &list, clear );
-  
+  clear_list( list, clear );
+  destroy_list( &list );
+
   return 0;
 }
