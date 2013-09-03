@@ -206,27 +206,35 @@ static BigInteger *multiply_int( BigInteger *number1, int value )
 
 BigInteger *multiply( BigInteger *number1, BigInteger *number2 )
 {
-  BigInteger *sum = init_big_integer( 0 );
+  BigInteger *sum = NULL;
   BigInteger *temp;
   int scale = 0;
   BigIntegerElement *p, *node;
 
+  init_list( &sum );
+
   for( p = get_list_tail( number2 ), scale = 0; p; p = p->previous, scale++ ) {
     int i = *( ( char * ) get_list_node_content( p ) ) - '0';
     temp = multiply_int( number1, i );
-    for( int s = 0; s < scale; s++ ) {
-      char *digit = ( char * ) malloc( sizeof( char ) );
-      *digit = '0';
 
-      if( make_list_node( &node, digit ) ) {
-	append_list_tail( temp, &node );
+    if( is_empty_list( sum ) ) {
+      destroy_list( &sum );
+      sum = temp;
+    } else {
+      for( int s = 0; s < scale; s++ ) {
+	char *digit = ( char * ) malloc( sizeof( char ) );
+	*digit = '0';
+
+	if( make_list_node( &node, digit ) ) {
+	  append_list_tail( temp, &node );
+	}
       }
-    }
 
-    BigInteger *result = add( sum, temp );
-    destroy_big_integer( &sum );
-    destroy_big_integer( &temp );
-    sum = result;
+      BigInteger *result = add( sum, temp );
+      destroy_big_integer( &sum );
+      destroy_big_integer( &temp );
+      sum = result;
+    }
   }
 
   if( !is_empty_list( sum ) ) {
