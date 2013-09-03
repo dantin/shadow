@@ -8,10 +8,8 @@
 
 static Status clear_polynomial_element( void *element )
 {
-  PolynomialTerm *term = ( PolynomialTerm * ) element;
-
-  if( term ) {
-    free( term );
+  if( element ) {
+    free( ( PolynomialTerm * ) element );
     return true;
   } else {
     return false;
@@ -21,11 +19,12 @@ static Status clear_polynomial_element( void *element )
 void print_polynomial( Polynomial *polynomial )
 {
   PolynomialElement *p;
+  PolynomialTerm *term;
   int i;
 
   if( !is_empty_list( polynomial ) ) {
     for( p = get_list_tail( polynomial ), i = 0; p; p = p->previous, i++ ) {
-      PolynomialTerm *term = ( PolynomialTerm * ) get_list_node_content( p );
+      term = ( PolynomialTerm * ) get_list_node_content( p );
       if( i > 0 ) {
 	printf( " %c ", term->coef >= 0 ? '+' : '-' );
       } else if( i == 0 && term->coef < 0 ) {
@@ -59,7 +58,7 @@ int compare( const void *src, const void *target )
   }
 }
 
-Status locate_polynomial_element( Polynomial *polynomial, PolynomialTerm *e, PolynomialElement **node, int ( * compare )( const void *src, const void * target) )
+Status locate_polynomial_element( Polynomial *polynomial, PolynomialTerm *e, PolynomialElement **node, int ( * compare )( const void *src, const void * target ) )
 {
   PolynomialElement *p;
   bool found = false;
@@ -83,56 +82,53 @@ Status locate_polynomial_element( Polynomial *polynomial, PolynomialTerm *e, Pol
 
 Polynomial *create_polynomial( int size )
 {
-  Polynomial *polynomial;
-  PolynomialElement *node;
+  Polynomial *polynomial = NULL;
+  PolynomialElement *node, *p;
+  PolynomialTerm *term;
   int i;
 
-  polynomial = ( Polynomial * ) malloc( sizeof( Polynomial ) );
-  assert( polynomial );
-  init_list( polynomial );
+  init_list( &polynomial );
 
   for( i = 0; i < size; i++ ) {
     float coef;
     int expn;
-    PolynomialElement *p;
 
     scanf( "%f %d", &coef, &expn );
-    PolynomialTerm *term = ( PolynomialTerm * ) malloc( sizeof( PolynomialTerm ) );
+    term = ( PolynomialTerm * ) malloc( sizeof( PolynomialTerm ) );
     term->coef = coef;
     term->expn = expn;
     
     if( !locate_polynomial_element( polynomial, term, &p, compare ) ) {
       if( make_list_node( &node, term ) ) {
 	if( p ) {
-	  insert_before_list_node( polynomial, &p, node );
+	  insert_before_list_node( polynomial, &p, &node );
 	} else {
-	  append_list_tail( polynomial, node );
+	  append_list_tail( polynomial, &node );
 	}
       }
     } else {
-      PolynomialTerm *target = ( PolynomialTerm * ) p->data;
+      PolynomialTerm *target = ( PolynomialTerm * ) get_list_node_content( p );
       target->coef += term->coef;
-      free( term );
+      clear_polynomial_element( term );
     }
   }
 
   if( !is_empty_list( polynomial ) ) {
     return polynomial;
   } else {
-    free( polynomial );
+    destroy_list( &polynomial );
     return NULL;
   }
 }
 
 void destroy_polynomial( Polynomial **polynomial )
 {
-  if( !( *polynomial ) ) {
+  if( !polynomial || !*polynomial ) {
     return;
   }
 
   clear_list( *polynomial, clear_polynomial_element );
-  free( *polynomial );
-  *polynomial = NULL;
+  destroy_list( polynomial );
 }
 
 long polynomial_size( Polynomial *polynomial )
@@ -142,13 +138,11 @@ long polynomial_size( Polynomial *polynomial )
 
 Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
 {
-  Polynomial *polynomial;
+  Polynomial *polynomial = NULL;
   PolynomialElement *node, *p, *q;
   PolynomialTerm *ta, *tb, *term;
 
-  polynomial = ( Polynomial * ) malloc( sizeof( Polynomial ) );
-  assert( polynomial );
-  init_list( polynomial );
+  init_list( &polynomial );
 
   for( p = get_list_head( pa ), q = get_list_head( pb ); p && q; ) {
     ta = ( PolynomialTerm * ) get_list_node_content( p );
@@ -160,7 +154,7 @@ Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
       term->expn = ta->expn;
       term->coef = ta->coef;
       if( make_list_node( &node, term ) ) {
-	append_list_tail( polynomial, node );
+	append_list_tail( polynomial, &node );
       }
       p = p->next;
     } else if( ta->expn == tb->expn ) {
@@ -168,10 +162,10 @@ Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
       term->coef = ta->coef + tb->coef;
       if( term->coef - 0 > 0.00001F ) {
 	if( make_list_node( &node, term ) ) {
-	  append_list_tail( polynomial, node );
+	  append_list_tail( polynomial, &node );
 	}
       } else {
-	free( term );
+	clear_polynomial_element( term );
       }
       p = p->next;
       q = q->next;
@@ -179,7 +173,7 @@ Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
       term->expn = tb->expn;
       term->coef = tb->coef;
       if( make_list_node( &node, term ) ) {
-	append_list_tail( polynomial, node );
+	append_list_tail( polynomial, &node );
       }
       q = q->next;
     }
@@ -193,7 +187,7 @@ Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
     term->expn = ta->expn;
     term->coef = ta->coef;
     if( make_list_node( &node, term ) ) {
-      append_list_tail( polynomial, node );
+      append_list_tail( polynomial, &node );
     }
 
     p = p->next;
@@ -207,7 +201,7 @@ Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
     term->expn = tb->expn;
     term->coef = tb->coef;
     if( make_list_node( &node, term ) ) {
-      append_list_tail( polynomial, node );
+      append_list_tail( polynomial, &node );
     }
 
     q = q->next;
@@ -216,22 +210,20 @@ Polynomial *add_polynomial( Polynomial *pa, Polynomial *pb )
   if( !is_empty_list( polynomial ) ) {
     return polynomial;
   } else {
-    free( polynomial );
+    destroy_list( &polynomial );
     return NULL;
   }
 }
 
 static Polynomial *multiply_polynomial_element( Polynomial *p, PolynomialElement *element )
 {
-  Polynomial *multiply;
+  Polynomial *multiply = NULL;
   PolynomialElement *node, *q;
   PolynomialTerm *term, *cur, *factor;
 
   factor = ( PolynomialTerm * ) get_list_node_content( element );
 
-  multiply = ( Polynomial * ) malloc( sizeof( Polynomial ) );
-  assert( multiply );
-  init_list( multiply );
+  init_list( &multiply );
 
   for( q = get_list_head( p ); q; q = q->next ) {
     cur = ( PolynomialTerm * ) get_list_node_content( q );
@@ -241,26 +233,24 @@ static Polynomial *multiply_polynomial_element( Polynomial *p, PolynomialElement
     term->expn = cur->expn + factor->expn;
     term->coef = cur->coef * factor->coef;
     if( make_list_node( &node, term ) ) {
-      append_list_tail( multiply, node );
+      append_list_tail( multiply, &node );
     }
   }
 
   if( !is_empty_list( multiply ) ) {
     return multiply;
   } else {
-    free( multiply );
+    destroy_list( &multiply );
     return NULL;
   }
 }
 
 Polynomial *multiply_polynomial( Polynomial *pa, Polynomial *pb )
 {
-  Polynomial *sum, *temp;
+  Polynomial *sum = NULL, *temp;
   PolynomialElement *p;
 
-  sum = ( Polynomial * ) malloc( sizeof( Polynomial ) );
-  assert( sum );
-  init_list( sum );
+  init_list( &sum );
 
   for( p = get_list_head( pa ); p; p = p->next ) {
     Polynomial *multiply = multiply_polynomial_element( pb, p );
@@ -277,7 +267,7 @@ Polynomial *multiply_polynomial( Polynomial *pa, Polynomial *pb )
   if( !is_empty_list( sum ) ) {
     return sum;
   } else {
-    free( sum );
+    destroy_list( &sum );
     return NULL;
   }
 }
