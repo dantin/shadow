@@ -255,6 +255,7 @@ Polynomial *multiply_polynomial( Polynomial *pa, Polynomial *pb )
   for( p = get_list_head( pa ); p; p = p->next ) {
     Polynomial *multiply = multiply_polynomial_element( pb, p );
     if( is_empty_list( sum ) ) {
+      destroy_polynomial( &sum );
       sum = multiply;
     } else {
       temp = sum;
