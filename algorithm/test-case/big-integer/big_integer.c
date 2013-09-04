@@ -15,19 +15,34 @@ static Status clear_big_integer_element( void *element )
   }
 }
 
+static Status make_big_integer_element( char **ppc, char ch )
+{
+  if( ppc == NULL || *ppc == NULL || *!isdigit( ch ) ) {
+    return false;
+  }
+
+  char *c = ( char * ) malloc( sizeof( char ) );
+  assert( c );
+  *c = ch;
+  *ppc = c;
+
+  return true;
+}
+
 static Status print_big_integer_element( void *data ) {
   if( data == NULL ) {
     return false;
   }
 
   char *element = ( char * ) data;
-  printf( "%c", *element);
+  printf( "%c", *element );
   return true;
 }
 
 void print_big_integer( BigInteger *big_integer )
 {
   if( !is_empty_list( big_integer ) ) {
+
     list_traverse( big_integer, print_big_integer_element );
   } else {
     printf( "NAN" );
@@ -38,11 +53,12 @@ void print_big_integer( BigInteger *big_integer )
 BigInteger *read_big_integer( void )
 {
   int c;
-  BigInteger *big_integer = NULL;
-  BigIntegerElement *node;
+  DoublyLinkedList *numbers = NULL;
+  DoublyLinkedListNode *node;
   char *digit;
 
-  init_list( &big_integer );
+  BigInteger *big_integer = ( BigInteger * ) malloc( sizeof( BigInteger ) );
+  init_list( &numbers );
 
   // handle heading '-' or '+'
   c = getchar();

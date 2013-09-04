@@ -3,9 +3,10 @@
 
 #include "doubly_linked_list.h"
 
-typedef DoublyLinkedList BigInteger;
-
-typedef DoublyLinkedListNode BigIntegerElement;
+typedef struct BigIntegerTag {
+  DoublyLinkedList *numbers;
+  int sign;
+} BigInteger;
 
 /*
  * 打印大数内容
