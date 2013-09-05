@@ -13,8 +13,8 @@ int main( void )
 
   ch = getch();
 
-  if( ch == KEY_F( 1 ) ) {
-    printw( "F1 key pressed" );
+  if( ch == KEY_F( 12 ) ) {
+    printw( "F12 key pressed" );
   } else {
     printw( "The pressed key is " );
     attron( A_BOLD );
