@@ -1,0 +1,20 @@
+CC=gcc
+LIBS=-lncurses
+
+SRC_DIR=.
+EXE_DIR=../demo/exe
+
+EXES=\
+	${EXE_DIR}/hello_world\
+	${EXE_DIR}/init_func_example
+
+${EXE_DIR}/%: %.o
+	${CC} -o $@ $< ${LIBS}
+
+%.o: ${SRC_DIR}/%.c
+	${CC} -o $@ -c $<
+
+all: ${EXES}
+
+clean:
+	@rm -f ${EXES} *~
