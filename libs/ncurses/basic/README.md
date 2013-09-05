@@ -17,3 +17,7 @@ printw() example
 #### scanw_example.c
 
 getstr() example
+
+#### simple_attr.c
+
+A program that can print a c file with comments in attribute

@@ -8,7 +8,8 @@ EXES=\
 	${EXE_DIR}/hello_world\
 	${EXE_DIR}/init_func_example\
 	${EXE_DIR}/printw_example\
-	${EXE_DIR}/scanw_example
+	${EXE_DIR}/scanw_example\
+	${EXE_DIR}/simple_attr
 
 ${EXE_DIR}/%: %.o
 	${CC} -o $@ $< ${LIBS}
