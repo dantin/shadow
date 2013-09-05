@@ -21,3 +21,7 @@ getstr() example
 #### simple_attr.c
 
 A program that can print a c file with comments in attribute
+
+#### with_chgat.c
+
+chgat() usage example
