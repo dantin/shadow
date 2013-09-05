@@ -12,4 +12,8 @@ Initialization functions example
 
 #### printw_example.c
 
-Printw example
+printw() example
+
+#### scanw_example.c
+
+getstr() example
