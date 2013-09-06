@@ -29,3 +29,7 @@ chgat() usage example
 #### win_border.c
 
 Show creation of windows and borders
+
+#### other_border.c
+
+Show usage of other border functions apart from box()
