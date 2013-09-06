@@ -16,7 +16,8 @@ EXES=\
 	${EXE_DIR}/simple_color\
 	${EXE_DIR}/simple_key\
 	${EXE_DIR}/mouse_menu\
-	${EXE_DIR}/temp_leave
+	${EXE_DIR}/temp_leave\
+	${EXE_DIR}/acs_vars
 
 ${EXE_DIR}/%: %.o
 	${CC} -o $@ $< ${LIBS}

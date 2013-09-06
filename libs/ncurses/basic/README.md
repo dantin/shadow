@@ -49,3 +49,7 @@ Menu accessible by mouse
 #### temp_leave.c
 
 Demonstrates temporarily leaving curses mode
+
+#### acs_vars.c
+
+ACS_ variables example
