@@ -33,3 +33,7 @@ Show creation of windows and borders
 #### other_border.c
 
 Show usage of other border functions apart from box()
+
+#### simple_color.c
+
+Example demonstrats colors
