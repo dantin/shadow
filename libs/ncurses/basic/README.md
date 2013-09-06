@@ -45,3 +45,7 @@ Menu accessible with keyboard UP, DOWN arrows
 #### mouse_menu.c
 
 Menu accessible by mouse
+
+#### temp_leave.c
+
+Demonstrates temporarily leaving curses mode
