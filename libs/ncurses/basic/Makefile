@@ -13,7 +13,8 @@ EXES=\
 	${EXE_DIR}/with_chgat\
 	${EXE_DIR}/win_border\
 	${EXE_DIR}/other_border\
-	${EXE_DIR}/simple_color
+	${EXE_DIR}/simple_color\
+	${EXE_DIR}/simple_key
 
 ${EXE_DIR}/%: %.o
 	${CC} -o $@ $< ${LIBS}

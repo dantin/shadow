@@ -37,3 +37,7 @@ Show usage of other border functions apart from box()
 #### simple_color.c
 
 Example demonstrats colors
+
+#### simple_key.c
+
+Menu accessible with keyboard UP, DOWN arrows
