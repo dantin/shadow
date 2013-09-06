@@ -25,3 +25,7 @@ A program that can print a c file with comments in attribute
 #### with_chgat.c
 
 chgat() usage example
+
+#### win_border.c
+
+Show creation of windows and borders
