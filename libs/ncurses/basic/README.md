@@ -41,3 +41,7 @@ Example demonstrats colors
 #### simple_key.c
 
 Menu accessible with keyboard UP, DOWN arrows
+
+#### mouse_menu.c
+
+Menu accessible by mouse
