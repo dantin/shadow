@@ -14,6 +14,7 @@ EXES=\
 	${EXE_DIR}/win_border\
 	${EXE_DIR}/other_border\
 	${EXE_DIR}/simple_color\
+	${EXE_DIR}/key_code\
 	${EXE_DIR}/simple_key\
 	${EXE_DIR}/mouse_menu\
 	${EXE_DIR}/temp_leave\

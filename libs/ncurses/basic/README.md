@@ -38,6 +38,10 @@ Show usage of other border functions apart from box()
 
 Example demonstrats colors
 
+#### key_code.c
+
+Show the scan code of the key pressed
+
 #### simple_key.c
 
 Menu accessible with keyboard UP, DOWN arrows
