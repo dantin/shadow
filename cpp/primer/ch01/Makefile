@@ -11,10 +11,11 @@ EXES=\
 	$(EXE_DIR)/while_count\
 	$(EXE_DIR)/for_count\
 	$(EXE_DIR)/sum\
-	$(EXE_DIR)/occurs
+	$(EXE_DIR)/occurs\
+	$(EXE_DIR)/item_io
 
 $(EXE_DIR)/%: %.o
-	$(CC) -o $@ $< $(LIBS)
+	$(CC) -o $@ $< $(CCFLAGS) $(LIBS)
 
 %.o: $(SRC_DIR)/%.cc
 	$(CC) $(CCFLAGS) -o $@ -c $<
