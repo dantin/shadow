@@ -12,7 +12,8 @@ EXES=\
 	$(EXE_DIR)/for_count\
 	$(EXE_DIR)/sum\
 	$(EXE_DIR)/occurs\
-	$(EXE_DIR)/item_io
+	$(EXE_DIR)/item_io\
+	$(EXE_DIR)/add_item
 
 $(EXE_DIR)/%: %.o
 	$(CC) -o $@ $< $(CCFLAGS) $(LIBS)
