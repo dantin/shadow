@@ -1,30 +1,33 @@
 CC=g++
-CCFLAGS=-std=c++0x
+CCFLAGS=-std=c++11
 LIBS=
 
-SRC_DIR=.
-EXE_DIR=.
-
 EXES=\
-	$(EXE_DIR)/main_only\
-	$(EXE_DIR)/add\
-	$(EXE_DIR)/while_count\
-	$(EXE_DIR)/for_count\
-	$(EXE_DIR)/sum\
-	$(EXE_DIR)/occurs\
-	$(EXE_DIR)/item_io\
-	$(EXE_DIR)/add_item
+	main_only\
+	add\
+	while_count\
+	for_count\
+	sum\
+	occurs\
+	item_io\
+	add_item
 
-$(EXE_DIR)/%: %.o
-	$(CC) -o $@ $< $(CCFLAGS) $(LIBS)
-
-%.o: $(SRC_DIR)/%.cc
-	$(CC) $(CCFLAGS) -o $@ -c $<
-
+.PHONY: all
 all: $(EXES)
 
-clean:
-	@rm -f $(EXES) *~
+%: %.o
+	$(CC) -o $@ $< $(CCFLAGS)
 
+%.o: %.cc
+	$(CC) -c -o $@ -c $< $(CCFLAGS)
+
+item_io: item_io.o
+add_item: add_item.o
+
+.PHONY: clean
+clean:
+	@rm -f $(EXES) *~ *.o
+
+.PHONY: test
 test: all
 	./test.sh
