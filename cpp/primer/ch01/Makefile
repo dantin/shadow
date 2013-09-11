@@ -1,5 +1,5 @@
-CC=g++
-CCFLAGS=-std=c++11
+CXX=g++
+CPPFLAGS=-std=c++11
 LIBS=
 
 EXES=\
@@ -16,17 +16,14 @@ EXES=\
 all: $(EXES)
 
 %: %.o
-	$(CC) -o $@ $< $(CCFLAGS)
+	$(CXX) -o $@ $< $(CPPFLAGS)
 
 %.o: %.cc
-	$(CC) -c -o $@ -c $< $(CCFLAGS)
-
-item_io: item_io.o
-add_item: add_item.o
+	$(CXX) -c -o $@ -c $< $(CPPFLAGS)
 
 .PHONY: clean
 clean:
-	@rm -f $(EXES) *~ *.o
+	@rm -f $(EXES) *~
 
 .PHONY: test
 test: all
