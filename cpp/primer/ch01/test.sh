@@ -1,12 +1,13 @@
 #!/bin/bash
 
-Exe_dir=.
+EXE_DIR=.
 
-$Exe_dir/main_only
-$Exe_dir/add < data/add
-$Exe_dir/while_count
-$Exe_dir/for_count
-$Exe_dir/sum < data/sum
-$Exe_dir/occurs < data/occurs
-$Exe_dir/item_io < data/item_io
-$Exe_dir/add_item < data/add_item
+$EXE_DIR/main_only
+$EXE_DIR/add < data/add
+$EXE_DIR/while_count
+$EXE_DIR/for_count
+$EXE_DIR/sum < data/sum
+$EXE_DIR/occurs < data/occurs
+$EXE_DIR/item_io < data/item_io
+$EXE_DIR/add_item < data/add_item
+$EXE_DIR/avg_price < data/book_sales

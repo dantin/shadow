@@ -10,7 +10,8 @@ EXES=\
 	sum\
 	occurs\
 	item_io\
-	add_item
+	add_item\
+	avg_price
 
 .PHONY: all
 all: $(EXES)
