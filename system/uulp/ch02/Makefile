@@ -3,7 +3,8 @@ CFLAGS=
 LIBS=
 
 EXES=\
-	who
+	who\
+	cp
 
 %: %.o
 	${CC} -o $@ $< ${LIBS}
