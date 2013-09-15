@@ -3,10 +3,12 @@
 #include <utmp.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <time.h>
 
 #define SHOWHOST
 
 void show_info( struct utmp * );
+void show_time( long );
 
 int main( void )
 {
@@ -37,10 +39,19 @@ void show_info( struct utmp *utbufp )
   printf( " " );
   printf( "%-8.8s", utbufp->ut_line );
   printf( " " );
-  printf( "%10ld", utbufp->ut_time );
+  show_time( utbufp->ut_time );
   printf( " " );
 #ifdef SHOWHOST
-  printf( "( %s )", utbufp->ut_host );
+  if( utbufp->ut_host[0] != '\0' ) {
+    printf( "( %s )", utbufp->ut_host );
+  }
 #endif
   printf( "\n" );
+}
+
+void show_time( long timeval )
+{
+  char *cp = ctime( &timeval );
+
+  printf( "%12.12s", cp );
 }
