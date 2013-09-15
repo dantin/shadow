@@ -29,6 +29,10 @@ int main( void )
 
 void show_info( struct utmp *utbufp )
 {
+  if( utbufp->ut_type != USER_PROCESS ) {
+    return;
+  }
+
   printf( "%-8.8s", utbufp->ut_name );
   printf( " " );
   printf( "%-8.8s", utbufp->ut_line );
