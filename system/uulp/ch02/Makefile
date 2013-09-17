@@ -4,15 +4,19 @@ LIBS=
 
 EXES=\
 	who\
-	cp
+	cp\
+	buffer_who
 
 %: %.o
-	${CC} -o $@ $< ${LIBS}
+	${CC} -o $@ $< ${CFLAGS}
 
 %.o: %.c
-	${CC} -o $@ -c $<
+	${CC} -o $@ -c $< ${CFLAGS}
+
+buffer_who: buffer_who.o utmplib.o
+	$(CC) -o $@ buffer_who.o utmplib.o
 
 all: ${EXES}
 
 clean:
-	@rm -f ${EXES} *~
+	@rm -f ${EXES} *~ *.o
