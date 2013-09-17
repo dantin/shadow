@@ -20,7 +20,7 @@ all: $(EXES)
 	$(CXX) -o $@ $< $(CPPFLAGS)
 
 %.o: %.cc
-	$(CXX) -c -o $@ -c $< $(CPPFLAGS)
+	$(CXX) -o $@ -c $< $(CPPFLAGS)
 
 .PHONY: clean
 clean:
