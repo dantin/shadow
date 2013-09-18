@@ -3,7 +3,8 @@ CFLAGS=
 LIBS=
 
 EXES=\
-	ls
+	ls\
+	filesize
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
