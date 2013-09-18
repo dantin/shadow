@@ -4,7 +4,8 @@ LIBS=
 
 EXES=\
 	ls\
-	filesize
+	filesize\
+	fileinfo
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
