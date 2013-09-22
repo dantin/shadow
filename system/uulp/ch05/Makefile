@@ -3,7 +3,8 @@ CFLAGS=
 LIBS=
 
 EXES=\
-	write
+	write\
+	listchars
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
