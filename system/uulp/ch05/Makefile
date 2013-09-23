@@ -5,7 +5,9 @@ LIBS=
 EXES=\
 	write\
 	listchars\
-	echostate
+	echostate\
+	setecho\
+	showtty
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
