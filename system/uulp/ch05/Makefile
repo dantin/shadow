@@ -4,7 +4,8 @@ LIBS=
 
 EXES=\
 	write\
-	listchars
+	listchars\
+	echostate
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
