@@ -3,7 +3,8 @@ CFLAGS=
 LIBS=
 
 EXES=\
-	rotate
+	rotate\
+	play_again
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
