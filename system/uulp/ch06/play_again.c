@@ -3,7 +3,7 @@
 
 #define QUESTION "Do you want another transaction"
 
-void set_crmode( void );
+void set_cr_noecho_mode( void );
 void tty_mode( int );
 int get_response( char * );
 
@@ -12,7 +12,7 @@ int main( void )
   int response;
 
   tty_mode( 0 );
-  set_crmode();
+  set_cr_noecho_mode();
   response = get_response( QUESTION );
   tty_mode( 1 );
 
@@ -21,11 +21,9 @@ int main( void )
 
 int get_response( char *question )
 {
-  int input;
-
   printf( " %s(y/n)?", question );
   while( 1 ) {
-    switch( input = getchar() ) {
+    switch( getchar() ) {
     case 'y':
     case 'Y':
       return 0;
@@ -33,20 +31,17 @@ int get_response( char *question )
     case 'N':
     case EOF:
       return 1;
-    default:
-      printf( "\nCannot understand %c. ", input );
-      printf( "Please type y or n\n" );
-      break;
     }
   }
 }
 
-void set_crmode( void )
+void set_cr_noecho_mode( void )
 {
   struct termios ttystate;
 
   tcgetattr( 0, &ttystate );
   ttystate.c_lflag    &= ~ICANON;
+  ttystate.c_lflag    &= ~ECHO;
   ttystate.c_cc[VMIN] = 1;
   tcsetattr( 0, TCSANOW, &ttystate );
 }
