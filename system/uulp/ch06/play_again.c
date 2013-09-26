@@ -2,12 +2,15 @@
 #include <termios.h>
 #include <fcntl.h>
 #include <string.h>
+#include <signal.h>
+#include <stdlib.h>
 
 #define QUESTION "Do you want another transaction"
 #define TRIES 3
 #define SLEEPTIME 2
 #define BEEP putchar('\a')
 
+void ctrl_c_handler( int );
 void set_cr_noecho_mode( void );
 void set_nodelay_mode( void );
 int get_ok_char( void );
@@ -21,6 +24,8 @@ int main( void )
   tty_mode( 0 );
   set_cr_noecho_mode();
   set_nodelay_mode();
+  signal( SIGINT, ctrl_c_handler );
+  signal( SIGQUIT, SIG_IGN );
   response = get_response( QUESTION, TRIES );
   tty_mode( 1 );
 
@@ -85,12 +90,20 @@ void tty_mode( int how )
 {
   static struct termios original_mode;
   static int original_flags;
+  static stored = 0;
 
   if( how == 0 ) {
     tcgetattr( 0, &original_mode );
     original_flags = fcntl( 0, F_GETFL );
-  } else {
+    stored = 1;
+  } else if( stored ) {
     tcsetattr( 0, TCSANOW, &original_mode );
     fcntl( 0, F_SETFL, original_flags );
   }
+}
+
+void ctrl_c_handler( int signum )
+{
+  tty_mode( 1 );
+  exit( 1 );
 }
