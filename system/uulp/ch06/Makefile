@@ -4,7 +4,8 @@ LIBS=
 
 EXES=\
 	rotate\
-	play_again
+	play_again\
+	sigdemo
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
