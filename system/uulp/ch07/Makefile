@@ -3,7 +3,8 @@ CFLAGS=-l curses
 LIBS=
 
 EXES=\
-	hello
+	hello\
+	bounce
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
