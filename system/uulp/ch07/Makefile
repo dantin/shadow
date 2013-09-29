@@ -4,7 +4,9 @@ LIBS=
 
 EXES=\
 	hello\
-	bounce
+	bounce\
+	sleep\
+	ticker_demo
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
