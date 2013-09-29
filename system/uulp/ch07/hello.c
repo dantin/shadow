@@ -18,10 +18,10 @@ int main( void )
     if( i % 2 == 1 ) {
       standend();
     }
+    sleep( 1 );
+    refresh();
   }
 
-  refresh();
-  getch();
   endwin();
 
   return 0;
