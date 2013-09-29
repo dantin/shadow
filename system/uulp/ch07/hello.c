@@ -18,8 +18,10 @@ int main( void )
     if( i % 2 == 1 ) {
       standend();
     }
-    sleep( 1 );
     refresh();
+    sleep( 1 );
+    move( i, i + i );
+    addstr( "            " );
   }
 
   endwin();
