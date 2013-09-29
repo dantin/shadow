@@ -3,11 +3,23 @@
 
 int main( void )
 {
+  int i;
+
   initscr();
   clear();
-  move( 10, 20 );
-  addstr( "Hello, world" );
-  move( LINES - 1, 0 );
+
+  for( i = 0; i < LINES; i++ ) {
+    move( i, i + i );
+    
+    if( i % 2  == 1 ) {
+      standout();
+    }
+    addstr( "Hello, world" );
+    if( i % 2 == 1 ) {
+      standend();
+    }
+  }
+
   refresh();
   getch();
   endwin();
