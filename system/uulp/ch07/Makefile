@@ -6,7 +6,8 @@ EXES=\
 	hello\
 	bounce\
 	sleep\
-	ticker_demo
+	ticker_demo\
+	sigdemo
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
