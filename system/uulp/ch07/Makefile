@@ -9,7 +9,8 @@ EXES=\
 	ticker_demo\
 	sigdemo\
 	sigactdemo\
-	bounce1d
+	bounce1d\
+	bounce2d
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
