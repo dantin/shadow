@@ -8,7 +8,8 @@ EXES=\
 	sleep\
 	ticker_demo\
 	sigdemo\
-	sigactdemo
+	sigactdemo\
+	bounce1d
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
