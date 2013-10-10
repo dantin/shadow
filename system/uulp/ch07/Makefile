@@ -10,7 +10,8 @@ EXES=\
 	sigdemo\
 	sigactdemo\
 	bounce1d\
-	bounce2d
+	bounce2d\
+	bounce_async
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
