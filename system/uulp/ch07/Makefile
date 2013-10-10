@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-l curses
+CFLAGS=-l curses -lrt
 LIBS=
 
 EXES=\
@@ -11,7 +11,8 @@ EXES=\
 	sigactdemo\
 	bounce1d\
 	bounce2d\
-	bounce_async
+	bounce_async\
+	bounce_io
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
