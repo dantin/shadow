@@ -30,6 +30,8 @@ int main( void )
   }
 
   wrap_up();
+
+  return 0;
 }
 
 void set_up( void )
