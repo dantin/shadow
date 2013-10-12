@@ -3,7 +3,8 @@ CFLAGS=
 LIBS=
 
 EXES=\
-	exec
+	exec\
+	psh
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
