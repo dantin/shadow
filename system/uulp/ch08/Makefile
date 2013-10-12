@@ -4,7 +4,9 @@ LIBS=
 
 EXES=\
 	exec\
-	psh
+	psh\
+	forkdemo\
+	forkdemo2
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
