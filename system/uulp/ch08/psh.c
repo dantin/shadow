@@ -6,7 +6,7 @@
 #define MAXARGS 20
 #define ARGLEN  100
 
-int execute( char *arglist[] );
+void execute( char *arglist[] );
 char *makestring( char *buf );
 
 int main( void )
@@ -32,12 +32,25 @@ int main( void )
   return 0;
 }
 
-int execute( char *arglist[] )
+void execute( char *arglist[] )
 {
-  execvp( arglist[ 0 ], arglist );
-  perror( "execvp failed" );
+  int pid, exitstatus;
 
-  exit( 1 );
+  pid = fork();
+  switch( pid ) {
+  case -1:
+    perror( "fork failed" );
+    exit( 1 );
+  case 0:
+    execvp( arglist[ 0 ], arglist );
+    perror( "execvp failed" );
+    exit( 1 );
+  default:
+    while( wait( &exitstatus ) != pid ) {
+      ;
+    }
+    printf( "child exited with status %d, %d\n", exitstatus >> 8, exitstatus &0377 );
+  }
 }
 
 char *makestring( char *buf )
