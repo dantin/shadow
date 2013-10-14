@@ -8,7 +8,8 @@ EXES=\
 	forkdemo\
 	forkdemo2\
 	forkdemo3\
-	waitdemo
+	waitdemo\
+	waitdemo2
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
