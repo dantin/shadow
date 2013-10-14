@@ -7,7 +7,8 @@ EXES=\
 	psh\
 	forkdemo\
 	forkdemo2\
-	forkdemo3
+	forkdemo3\
+	waitdemo
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
