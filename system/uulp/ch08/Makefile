@@ -6,7 +6,8 @@ EXES=\
 	exec\
 	psh\
 	forkdemo\
-	forkdemo2
+	forkdemo2\
+	forkdemo3
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
