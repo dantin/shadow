@@ -1,6 +1,8 @@
 #ifndef __SMSH_H__
 #define __SMSH_H__
 
+#include <stdio.h>
+
 #define YES 1
 #define NO  0
 
