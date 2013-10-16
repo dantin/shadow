@@ -1,0 +1,13 @@
+#!/bin/sh
+
+BOOK=$HOME/phonebook.data
+echo find what name in phonebook
+read NAME
+if grep $NAME $BOOK > /tmp/pd.tmp
+then
+   echo Entries for $NAME
+   cat /tmp/pd.tmp
+else
+   echo No entries for $NAME
+fi
+rm /tmp/pd.tmp
