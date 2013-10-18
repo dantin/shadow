@@ -27,8 +27,10 @@ int main( void )
   return 0;
 }
 
+extern char **environ;
 void setup( void )
 {
+  VLenviron2table( environ );
   signal( SIGINT, SIG_IGN );
   signal( SIGQUIT, SIG_IGN );
 }

@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include "varlib.h"
+
+extern char **environ;
 
 int execute( char *argv[] )
 {
@@ -14,6 +17,7 @@ int execute( char *argv[] )
   if( ( pid = fork() ) == -1 ) {
     perror( "fork" );
   } else if( pid == 0 ) {
+    environ = VLtable2environ();
     signal( SIGINT, SIG_DFL );
     signal( SIGQUIT, SIG_DFL );
     execvp( argv[0], argv );

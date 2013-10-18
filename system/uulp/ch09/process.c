@@ -14,7 +14,9 @@ int process( char **args )
   } else if( is_control_command( args[ 0 ] ) ) {
     rv = do_control_command( args );
   } else if( ok_to_execute() ) {
-    rv = execute( args );
+    if( !builtin_command( args, &rv ) ) {
+      rv = execute( args );
+    }
   }
 
   return rv;
