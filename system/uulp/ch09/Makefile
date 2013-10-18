@@ -3,7 +3,15 @@ CFLAGS=
 LIBS=
 
 EXES=\
-	smsh
+	smsh\
+	showenv\
+	getenv
+
+getenv: getenv.c
+	$(CC) -o getenv getenv.c $(CFLAGS)
+
+showenv: showenv.c
+	$(CC) -o showenv showenv.c $(CFLAGS)
 
 smsh: smsh.o splitline.o execute.o process.o controlflow.o
 	$(CC) -o smsh smsh.o splitline.o execute.o process.o controlflow.o $(CFLAGS)
