@@ -3,7 +3,8 @@ CFLAGS=
 LIBS=
 
 EXES=\
-	listargs
+	listargs\
+	stdinredir_cto
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
