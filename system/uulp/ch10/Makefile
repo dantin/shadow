@@ -4,7 +4,9 @@ LIBS=
 
 EXES=\
 	listargs\
-	stdinredir_cto
+	stdinredir_cto\
+	stdinredir_ocdc\
+	stdinredir_dup2
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
