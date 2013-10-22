@@ -6,7 +6,8 @@ EXES=\
 	listargs\
 	stdinredir_cto\
 	stdinredir_ocdc\
-	stdinredir_dup2
+	stdinredir_dup2\
+	whotofile
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
@@ -17,4 +18,4 @@ EXES=\
 all: ${EXES}
 
 clean:
-	@rm -f ${EXES} *.o *~
+	@rm -f ${EXES} *.o *~ userlist
