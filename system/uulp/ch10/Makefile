@@ -9,7 +9,8 @@ EXES=\
 	stdinredir_dup2\
 	whotofile\
 	pipedemo\
-	pipedemo2
+	pipedemo2\
+	pipe
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
