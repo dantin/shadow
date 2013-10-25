@@ -5,7 +5,8 @@ LIBS=
 EXES=\
 	tinybc\
 	popendemo\
-	popen_ex3
+	popen_ex3\
+	timeserv
 
 %: %.o
 	${CC} -o $@ $< ${CFLAGS}
