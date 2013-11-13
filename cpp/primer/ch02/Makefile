@@ -1,8 +1,10 @@
 CXX=g++
-CPPFLAGS=-std=c++11
+CPPFLAGS=-std=c++11 -Wall
 LIBS=
 
 EXES=\
+	convs\
+	unsigned\
 	scope_levels
 
 .PHONY: all

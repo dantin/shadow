@@ -2,4 +2,6 @@
 
 EXE_DIR=.
 
-$EXE_DIR/scope_levels
+${EXE_DIR}/convs
+${EXE_DIR}/unsigned
+${EXE_DIR}/scope_levels
