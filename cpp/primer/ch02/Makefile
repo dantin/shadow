@@ -6,6 +6,7 @@ EXES=\
 	convs\
 	unsigned\
 	escape\
+	inits\
 	scope_levels
 
 .PHONY: all
