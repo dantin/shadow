@@ -6,6 +6,7 @@ EXES=\
 	convs\
 	unsigned\
 	escape\
+	literals\
 	inits\
 	scope_levels
 
