@@ -5,6 +5,7 @@ LIBS=
 EXES=\
 	convs\
 	unsigned\
+	escape\
 	scope_levels
 
 .PHONY: all
