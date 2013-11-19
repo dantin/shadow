@@ -8,3 +8,4 @@ ${EXE_DIR}/escape
 ${EXE_DIR}/literals
 ${EXE_DIR}/inits
 ${EXE_DIR}/scope_levels
+${EXE_DIR}/ref-ex

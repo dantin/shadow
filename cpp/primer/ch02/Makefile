@@ -8,6 +8,7 @@ EXES=\
 	escape\
 	literals\
 	inits\
+	ref-ex\
 	scope_levels
 
 .PHONY: all
