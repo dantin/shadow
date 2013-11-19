@@ -9,6 +9,7 @@ EXES=\
 	literals\
 	inits\
 	ref-ex\
+	compounddecls\
 	scope_levels
 
 .PHONY: all

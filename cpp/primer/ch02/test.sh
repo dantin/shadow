@@ -9,3 +9,4 @@ ${EXE_DIR}/literals
 ${EXE_DIR}/inits
 ${EXE_DIR}/scope_levels
 ${EXE_DIR}/ref-ex
+${EXE_DIR}/compounddecls
