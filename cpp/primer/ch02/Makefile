@@ -10,7 +10,8 @@ EXES=\
 	inits\
 	ref-ex\
 	compounddecls\
-	scope_levels
+	scope_levels\
+	dbl_ptr
 
 .PHONY: all
 all: $(EXES)
