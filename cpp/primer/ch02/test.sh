@@ -12,3 +12,4 @@ ${EXE_DIR}/ref-ex
 ${EXE_DIR}/compounddecls
 ${EXE_DIR}/dbl_ptr
 ${EXE_DIR}/decl-ex
+${EXE_DIR}/Sales_data < ${EXE_DIR}/data/add_item

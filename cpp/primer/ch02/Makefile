@@ -12,7 +12,8 @@ EXES=\
 	compounddecls\
 	scope_levels\
 	dbl_ptr\
-	decl-ex
+	decl-ex\
+	Sales_data
 
 .PHONY: all
 all: $(EXES)
