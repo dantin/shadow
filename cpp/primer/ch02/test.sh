@@ -11,3 +11,4 @@ ${EXE_DIR}/scope_levels
 ${EXE_DIR}/ref-ex
 ${EXE_DIR}/compounddecls
 ${EXE_DIR}/dbl_ptr
+${EXE_DIR}/decl-ex

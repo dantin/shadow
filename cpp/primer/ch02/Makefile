@@ -11,7 +11,8 @@ EXES=\
 	ref-ex\
 	compounddecls\
 	scope_levels\
-	dbl_ptr
+	dbl_ptr\
+	decl-ex
 
 .PHONY: all
 all: $(EXES)
