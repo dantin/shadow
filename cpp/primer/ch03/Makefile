@@ -4,7 +4,8 @@ LIBS=
 
 EXES=\
 	add_using\
-	string_io
+	string_io\
+	string_io2
 
 .PHONY: all
 all: $(EXES)
