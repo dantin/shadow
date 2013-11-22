@@ -3,7 +3,8 @@ CPPFLAGS=-std=c++11 -Wall
 LIBS=
 
 EXES=\
-	add_using
+	add_using\
+	string_io
 
 .PHONY: all
 all: $(EXES)
